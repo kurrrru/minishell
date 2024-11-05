@@ -2,7 +2,7 @@
 NAME		= 	minishell
 
 # source files
-SRCS		=	$(wildcard *.c) # Change to specify all source files explicitly later
+SRCS		=	$(wildcard src/*/*.c) # Change to specify all source files explicitly later
 
 # object files
 OBJS		=	$(SRCS:.c=.o)
@@ -20,7 +20,7 @@ INCLUDE_DIR	= 	include
 
 # flags
 CFLAGS		=	-Wall -Wextra -Werror -I$(LIBFT_DIR) -I$(INCLUDE_DIR)
-LFLAGS		=	-Wall -Wextra -Werror -L$(LIBFT_DIR) -lft
+LFLAGS		=	-Wall -Wextra -Werror -L$(LIBFT_DIR) -lft -lreadline
 
 .DEFAULT_GOAL = all
 
