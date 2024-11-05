@@ -15,8 +15,11 @@ LIBFT_DIR	=	libft
 LIBFT_NAME	=	libft.a
 LIBFT		=	$(LIBFT_DIR)/$(LIBFT_NAME)
 
+# include
+INCLUDE_DIR	= 	include	
+
 # flags
-CFLAGS		=	-Wall -Wextra -Werror -I$(LIBFT_DIR)
+CFLAGS		=	-Wall -Wextra -Werror -I$(LIBFT_DIR) -I$(INCLUDE_DIR)
 LFLAGS		=	-Wall -Wextra -Werror -L$(LIBFT_DIR) -lft
 
 .DEFAULT_GOAL = all
