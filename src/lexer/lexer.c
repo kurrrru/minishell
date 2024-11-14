@@ -3,115 +3,118 @@
 /*                                                        :::      ::::::::   */
 /*   lexer.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nkawaguc <nkawaguc@student.42.fr>          +#+  +:+       +#+        */
+/*   By: nkawaguc <nkawaguc@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/03 22:22:20 by nkawaguc          #+#    #+#             */
-/*   Updated: 2024/11/05 23:14:04 by nkawaguc         ###   ########.fr       */
+/*   Updated: 2024/11/14 23:43:20 by nkawaguc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/lexer.h"
 
-static int	is_space(char c);
-static int	sign_len(char *s);
+static void	lexer_init(t_data *data, t_lexer_flag *flag);
+static void	count_token(const char *input_line, t_data *data, t_lexer_flag *flag);
 
-void	lexer(const char *input_line, t_data *data)
+int	lexer(const char *input_line, t_data *data)
 {
-	int		dquote;
-	int		squote;
-	int		sep;
-	int		i;
-	int		j;
+	t_lexer_flag	flag;
+	int				i;
+	int				j;
 
-	dquote = 0;
-	squote = 0;
-	sep = 1;
-	i = -1;
-	data->token_num = 0;
-	while (input_line[++i])
-	{
-		if (input_line[i] == '"' && !squote)
-		{
-			if (!dquote && sep)
-			{
-				data->token_num++;
-				sep = 0;
-			}
-			dquote = !dquote;
-		}
-		else if (input_line[i] == '\'' && !dquote)
-		{
-			if (!squote && sep)
-			{
-				data->token_num++;
-				sep = 0;
-			}
-			squote = !squote;
-		}
-		else if (is_space(input_line[i]) && !dquote && !squote)
-			sep = 1;
-		else if (sign_len((char *)&input_line[i]) > 0 && !dquote && !squote)
-		{
-			data->token_num++;
-			i += sign_len((char *)&input_line[i]) - 1;
-			sep = 1;
-		}
-		else if (sep && !is_space(input_line[i]))
-		{
-			data->token_num++;
-			sep = 0;
-		}
-	}
-	if (squote || dquote)
+	count_token(input_line, data, &flag);
+	printf("token_num: %d\n", data->token_num);
+	if (flag.squote || flag.dquote)
 	{
 		write(STDERR_FILENO, "syntax error\n", 13);
-		exit(EXIT_FAILURE);
+		return (EXIT_INVALID_INPUT);
 	}
-	data->token_arr = (t_token *)xmalloc(sizeof(t_token) * data->token_num + 1);
+	data->token_arr = ft_calloc(data->token_num + 1, sizeof(t_token));
+	if (!data->token_arr)
+	{
+		perror("ft_calloc");
+		return (EXIT_FAILURE);
+	}
 	i = -1;
 	j = 0;
 	while (input_line[++i])
 	{
-		if (!is_space(input_line[i]) && sign_len((char *)&input_line[i]) == 0)
+		if (!is_space(input_line[i]) && sign_len(&input_line[i]) == 0)
 		{
 			input_line += i;
 			i = -1;
 			while (input_line[++i])
 			{
-				if (is_space(input_line[i]) && !dquote && !squote)
+				if (is_space(input_line[i]) && !flag.dquote && !flag.squote)
 					break ;
-				else if (sign_len((char *)&input_line[i]) > 0 && !dquote && !squote)
+				else if (sign_len(&input_line[i]) > 0 && !flag.dquote && !flag.squote)
 					break ;
-				if (input_line[i] == '"' && !squote)
-					dquote = !dquote;
-				else if (input_line[i] == '\'' && !dquote)
-					squote = !squote;
+				if (input_line[i] == '"' && !flag.squote)
+					flag.dquote = !flag.dquote;
+				else if (input_line[i] == '\'' && !flag.dquote)
+					flag.squote = !flag.squote;
 			}
-			data->token_arr[j++].token = xstrndup(input_line, i);
+			data->token_arr[j++].token = ft_substr(input_line, 0, i);
+			if (!data->token_arr[j - 1].token)
+			{
+				perror("ft_substr");
+				free_data(data);
+				return (EXIT_FAILURE);
+			}
 			input_line += i;
 			i = -1;
 		}
-		else if (sign_len((char *)&input_line[i]) > 0 && !dquote && !squote)
+		else if (sign_len(&input_line[i]) > 0 && !flag.dquote && !flag.squote)
 		{
-			data->token_arr[j++].token = xstrndup((char *)&input_line[i], sign_len((char *)&input_line[i]));
+			data->token_arr[j++].token = ft_substr(input_line, i, sign_len(&input_line[i]));
+			if (!data->token_arr[j - 1].token)
+			{
+				perror("ft_substr");
+				free_data(data);
+				return (EXIT_FAILURE);
+			}
 			input_line += sign_len((char *)&input_line[i]) + i;
 			i = -1;
 		}
 	}
+	return (EXIT_SUCCESS);
 }
 
-static int is_space(char c)
+static void	lexer_init(t_data *data, t_lexer_flag *flag)
 {
-	return (c == ' ' || c == '\t');
+	data->token_num = 0;
+	data->token_arr = NULL;
+	flag->dquote = 0;
+	flag->squote = 0;
+	flag->sep = 1;
 }
 
-static int	sign_len(char *s)
+static void	count_token(const char *input_line,
+	t_data *data, t_lexer_flag *flag)
 {
-	if (ft_strncmp(s, "&&", 2) == 0 || ft_strncmp(s, "||", 2) == 0 || ft_strncmp(s, ">>", 2) == 0 || ft_strncmp(s, "<<", 2) == 0)
-		return (2);
-	if (s[0] == '|' || s[0] == '<' || s[0] == '>' || s[0] == '(' || s[0] == ')')
-		return (1);
-	return (0);
+	int	i;
+
+	lexer_init(data, flag);
+	i = -1;
+	while (input_line[++i])
+	{
+		if ((input_line[i] == '"' && !flag->squote)
+			|| (input_line[i] == '\'' && !flag->dquote))
+			data->token_num += flip_quote(input_line[i], flag);
+		else if (is_space(input_line[i]) && !flag->dquote && !flag->squote)
+			flag->sep = 1;
+		else if (sign_len(&input_line[i]) > 0
+			&& !flag->dquote && !flag->squote)
+		{
+			data->token_num++;
+			i += sign_len(&input_line[i]) - 1;
+			flag->sep = 1;
+		}
+		else if (flag->sep && !is_space(input_line[i]))
+		{
+			data->token_num++;
+			flag->sep = 0;
+		}
+	}
 }
 
 int	main(void)
@@ -119,14 +122,19 @@ int	main(void)
 	char		*input_line;
 	t_data		data;
 	int			i;
-	char		*type[] = {"WORD", "PIPE", "REDIRECT_IN", "REDIRECT_OUT", "REDIRECT_HEREDOC", "REDIRECT_APPEND", "PAREN_LEFT", "PAREN_RIGHT", "LOGICAL_AND", "LOGICAL_OR"};
+	const char	*type[] = {"WORD", "PIPE", "REDIRECT_IN", "REDIRECT_OUT",
+		"REDIRECT_HEREDOC", "REDIRECT_APPEND", "PAREN_LEFT",
+		"PAREN_RIGHT", "LOGICAL_AND", "LOGICAL_OR"};
+	int			status;
 
 	while (1)
 	{
 		input_line = readline("lexer$ ");
 		if (!input_line)
 			break ;
-		lexer(input_line, &data);
+		status = lexer(input_line, &data);
+		if (status != EXIT_SUCCESS)
+			continue ;
 		assign_token_type(&data);
 		i = -1;
 		while (++i < data.token_num)

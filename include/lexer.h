@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   lexer.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nkawaguc <nkawaguc@student.42.fr>          +#+  +:+       +#+        */
+/*   By: nkawaguc <nkawaguc@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/03 22:04:10 by nkawaguc          #+#    #+#             */
-/*   Updated: 2024/11/05 23:11:26 by nkawaguc         ###   ########.fr       */
+/*   Updated: 2024/11/14 23:22:26 by nkawaguc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,7 @@
 # define LEXER_H
 
 # include "include.h"
+# include "macro.h"
 # include "util.h"
 
 typedef enum e_token_type
@@ -42,7 +43,20 @@ typedef struct s_data
 	int		token_num;
 }		t_data;
 
-void	lexer(const char *input_line, t_data *data);
+typedef struct s_lexer_flag
+{
+	int	dquote;
+	int	squote;
+	int	sep;
+}		t_lexer_flag;
+
+
+int		is_space(char c);
+int		sign_len(const char *s);
+int		flip_quote(const char quote, t_lexer_flag *flag);
+
+int		lexer(const char *input_line, t_data *data);
 void	assign_token_type(t_data *data);
+void	free_data(t_data *data);
 
 #endif

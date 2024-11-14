@@ -1,22 +1,24 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   string.c                                           :+:      :+:    :+:   */
+/*   macro.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: nkawaguc <nkawaguc@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/11/05 23:08:07 by nkawaguc          #+#    #+#             */
-/*   Updated: 2024/11/14 22:49:39 by nkawaguc         ###   ########.fr       */
+/*   Created: 2024/11/14 22:39:30 by nkawaguc          #+#    #+#             */
+/*   Updated: 2024/11/14 22:40:40 by nkawaguc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../include/util.h"
+#ifndef MACRO_H
+# define MACRO_H
 
-char	*xstrndup(const char *s, size_t n)
-{
-	char	*new_s;
+# define TRUE 1
+# define FALSE 0
+# define ERROR -1
 
-	new_s = (char *)xmalloc(n + 1);
-	ft_strlcpy(new_s, s, n + 1);
-	return (new_s);
-}
+# define EXIT_INVALID_INPUT 2
+# define EXIT_EXEC_ERROR 126
+# define EXIT_CMD_NOT_FOUND 127
+
+#endif

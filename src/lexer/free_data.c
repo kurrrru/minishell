@@ -1,22 +1,23 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   string.c                                           :+:      :+:    :+:   */
+/*   free_data.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: nkawaguc <nkawaguc@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/11/05 23:08:07 by nkawaguc          #+#    #+#             */
-/*   Updated: 2024/11/14 22:49:39 by nkawaguc         ###   ########.fr       */
+/*   Created: 2024/11/14 23:09:29 by nkawaguc          #+#    #+#             */
+/*   Updated: 2024/11/14 23:09:35 by nkawaguc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../include/util.h"
+#include "../../include/lexer.h"
 
-char	*xstrndup(const char *s, size_t n)
+void	free_data(t_data *data)
 {
-	char	*new_s;
+	int	i;
 
-	new_s = (char *)xmalloc(n + 1);
-	ft_strlcpy(new_s, s, n + 1);
-	return (new_s);
+	i = -1;
+	while (++i < data->token_num)
+		free(data->token_arr[i].token);
+	free(data->token_arr);
 }

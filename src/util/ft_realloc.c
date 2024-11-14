@@ -1,22 +1,25 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   string.c                                           :+:      :+:    :+:   */
+/*   ft_realloc.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: nkawaguc <nkawaguc@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/11/05 23:08:07 by nkawaguc          #+#    #+#             */
-/*   Updated: 2024/11/14 22:49:39 by nkawaguc         ###   ########.fr       */
+/*   Created: 2024/11/14 22:45:51 by nkawaguc          #+#    #+#             */
+/*   Updated: 2024/11/14 23:08:53 by nkawaguc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/util.h"
 
-char	*xstrndup(const char *s, size_t n)
+void	*ft_realloc(void *ptr, size_t old_size, size_t new_size)
 {
-	char	*new_s;
+	void	*new_ptr;
 
-	new_s = (char *)xmalloc(n + 1);
-	ft_strlcpy(new_s, s, n + 1);
-	return (new_s);
+	new_ptr = malloc(new_size);
+	if (!new_ptr)
+		return (NULL);
+	ft_memcpy(new_ptr, ptr, old_size);
+	free(ptr);
+	return (new_ptr);
 }
