@@ -6,7 +6,7 @@
 /*   By: nkawaguc <nkawaguc@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/14 22:43:13 by nkawaguc          #+#    #+#             */
-/*   Updated: 2024/11/14 23:46:10 by nkawaguc         ###   ########.fr       */
+/*   Updated: 2024/11/15 01:45:40 by nkawaguc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,7 +39,7 @@ int	flip_quote(const char quote, t_lexer_flag *flag)
 			flag->sep = 0;
 			token_num_diff = 1;
 		}
-		(flag->dquote) = !(flag->dquote);
+		flag->dquote = !flag->dquote;
 	}
 	else if (quote == '\'' && !flag->dquote)
 	{
@@ -48,7 +48,7 @@ int	flip_quote(const char quote, t_lexer_flag *flag)
 			flag->sep = 0;
 			token_num_diff = 1;
 		}
-		(flag->squote) = !(flag->squote);
+		flag->squote = !flag->squote;
 	}
 	return (token_num_diff);
 }
