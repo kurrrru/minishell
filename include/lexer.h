@@ -6,7 +6,7 @@
 /*   By: nkawaguc <nkawaguc@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/03 22:04:10 by nkawaguc          #+#    #+#             */
-/*   Updated: 2024/11/14 23:22:26 by nkawaguc         ###   ########.fr       */
+/*   Updated: 2024/11/14 23:46:00 by nkawaguc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,7 +49,6 @@ typedef struct s_lexer_flag
 	int	squote;
 	int	sep;
 }		t_lexer_flag;
-
 
 int		is_space(char c);
 int		sign_len(const char *s);

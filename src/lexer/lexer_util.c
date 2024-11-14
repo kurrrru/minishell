@@ -6,7 +6,7 @@
 /*   By: nkawaguc <nkawaguc@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/14 22:43:13 by nkawaguc          #+#    #+#             */
-/*   Updated: 2024/11/14 23:22:12 by nkawaguc         ###   ########.fr       */
+/*   Updated: 2024/11/14 23:46:10 by nkawaguc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,7 @@ int	sign_len(const char *s)
 	return (0);
 }
 
-int flip_quote(const char quote, t_lexer_flag *flag)
+int	flip_quote(const char quote, t_lexer_flag *flag)
 {
 	int	token_num_diff;
 
