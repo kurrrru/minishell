@@ -6,7 +6,7 @@
 /*   By: nkawaguc <nkawaguc@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/03 22:04:10 by nkawaguc          #+#    #+#             */
-/*   Updated: 2024/11/14 23:46:00 by nkawaguc         ###   ########.fr       */
+/*   Updated: 2024/11/15 13:50:01 by nkawaguc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,6 +55,7 @@ int		sign_len(const char *s);
 int		flip_quote(const char quote, t_lexer_flag *flag);
 
 int		lexer(const char *input_line, t_data *data);
+int		lexer_split(const char *input_line, t_data *data);
 void	assign_token_type(t_data *data);
 void	free_data(t_data *data);
 

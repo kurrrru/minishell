@@ -6,7 +6,7 @@
 /*   By: nkawaguc <nkawaguc@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/15 12:39:33 by nkawaguc          #+#    #+#             */
-/*   Updated: 2024/11/15 12:57:28 by nkawaguc         ###   ########.fr       */
+/*   Updated: 2024/11/15 13:50:18 by nkawaguc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,6 @@ int	main(void)
 		status = lexer(input_line, &data);
 		if (status != EXIT_SUCCESS)
 			continue ;
-		assign_token_type(&data);
 		printf("  token_num: %d\n", data.token_num);
 		i = -1;
 		while (++i < data.token_num)
