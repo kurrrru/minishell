@@ -6,7 +6,7 @@
 /*   By: nkawaguc <nkawaguc@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/03 22:22:20 by nkawaguc          #+#    #+#             */
-/*   Updated: 2024/11/15 12:55:51 by nkawaguc         ###   ########.fr       */
+/*   Updated: 2024/11/15 13:04:51 by nkawaguc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,9 +28,9 @@ int	lexer(const char *input_line, t_data *data)
 	if (flag.squote || flag.dquote)
 	{
 		if (flag.dquote)
-			ft_putendl_fd("Syntax error: unmatched \"", STDERR_FILENO);
+			ft_putendl_fd("Syntax error: unmatched `\"'", STDERR_FILENO);
 		else
-			ft_putendl_fd("Syntax error: unmatched '", STDERR_FILENO);
+			ft_putendl_fd("Syntax error: unmatched `''", STDERR_FILENO);
 		return (EXIT_INVALID_INPUT);
 	}
 	data->token_arr = ft_calloc(data->token_num + 1, sizeof(t_token));
