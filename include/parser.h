@@ -1,4 +1,3 @@
-
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
@@ -6,8 +5,8 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: nkawaguc <nkawaguc@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/11/05 23:20:33 by nkawaguc          #+#    #+#             */
-/*   Updated: 2024/11/14 21:00:51 by nkawaguc         ###   ########.fr       */
+/*   Created: 2024/11/15 14:18:14 by nkawaguc          #+#    #+#             */
+/*   Updated: 2024/11/15 14:18:15 by nkawaguc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,11 +61,13 @@ typedef struct s_parse_helper
 	int	paren_open;
 }	t_parse_helper;
 
+void	parser(t_node **root, t_data *data, t_config *config);
 t_node	*parse_data(t_data *data, t_parse_helper *helper, t_config *config,
 			int depth);
-void	parser(t_node **root, t_data *data, t_config *config);
 void	dump_node(t_node *node, int depth);
 void	dump_tree(t_node *root);
 void	free_tree(t_node *root);
+t_node	*new_command_node(t_token token);
+t_node	*new_connector_node(t_token token);
 
 #endif
