@@ -6,7 +6,7 @@
 /*   By: nkawaguc <nkawaguc@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/05 23:03:58 by nkawaguc          #+#    #+#             */
-/*   Updated: 2024/11/14 23:12:47 by nkawaguc         ###   ########.fr       */
+/*   Updated: 2024/11/15 13:38:07 by nkawaguc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,5 @@ int		ft_strcmp(const char *s1, const char *s2);
 
 void	*xmalloc(size_t size);
 void	*xrealloc(void *ptr, size_t old_size, size_t new_size);
-
-char	*xstrndup(const char *s, size_t n);
 
 #endif
