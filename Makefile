@@ -16,7 +16,7 @@ LIBFT_NAME	=	libft.a
 LIBFT		=	$(LIBFT_DIR)/$(LIBFT_NAME)
 
 # include
-INCLUDE_DIR	= 	include	
+INCLUDE_DIR	= 	include
 
 # flags
 CFLAGS		=	-Wall -Wextra -Werror -I$(LIBFT_DIR) -I$(INCLUDE_DIR)
