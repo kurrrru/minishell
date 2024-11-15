@@ -62,6 +62,8 @@ typedef struct s_parse_helper
 	int	paren_open;
 }	t_parse_helper;
 
+t_node	*parse_data(t_data *data, t_parse_helper *helper, t_config *config,
+			int depth);
 void	parser(t_node **root, t_data *data, t_config *config);
 void	dump_node(t_node *node, int depth);
 void	dump_tree(t_node *root);
