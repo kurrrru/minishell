@@ -21,6 +21,10 @@ INCLUDE_DIR	= 	include
 # flags
 CFLAGS		=	-Wall -Wextra -Werror -I$(LIBFT_DIR) -I$(INCLUDE_DIR)
 LFLAGS		=	-Wall -Wextra -Werror -L$(LIBFT_DIR) -lft -lreadline
+SANITIZE	=	-fsanitize=address
+
+CFLAGS		+=	$(SANITIZE)
+LFLAGS		+=	$(SANITIZE)
 
 .DEFAULT_GOAL = all
 

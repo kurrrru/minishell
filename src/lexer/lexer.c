@@ -6,26 +6,31 @@
 /*   By: nkawaguc <nkawaguc@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/03 22:22:20 by nkawaguc          #+#    #+#             */
-/*   Updated: 2024/11/14 23:43:20 by nkawaguc         ###   ########.fr       */
+/*   Updated: 2024/11/15 12:55:51 by nkawaguc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/lexer.h"
 
 static void	lexer_init(t_data *data, t_lexer_flag *flag);
-static void	count_token(const char *input_line, t_data *data, t_lexer_flag *flag);
+static void	count_token(const char *input_line,
+				t_data *data, t_lexer_flag *flag);
+static int	copy_word(const char **input_line,
+				t_token *token, int *i, t_lexer_flag *flag);
+static int	split_token(const char *input_line,
+				t_data *data, t_lexer_flag *flag);
 
 int	lexer(const char *input_line, t_data *data)
 {
 	t_lexer_flag	flag;
-	int				i;
-	int				j;
 
 	count_token(input_line, data, &flag);
-	printf("token_num: %d\n", data->token_num);
 	if (flag.squote || flag.dquote)
 	{
-		write(STDERR_FILENO, "syntax error\n", 13);
+		if (flag.dquote)
+			ft_putendl_fd("Syntax error: unmatched \"", STDERR_FILENO);
+		else
+			ft_putendl_fd("Syntax error: unmatched '", STDERR_FILENO);
 		return (EXIT_INVALID_INPUT);
 	}
 	data->token_arr = ft_calloc(data->token_num + 1, sizeof(t_token));
@@ -34,49 +39,7 @@ int	lexer(const char *input_line, t_data *data)
 		perror("ft_calloc");
 		return (EXIT_FAILURE);
 	}
-	i = -1;
-	j = 0;
-	while (input_line[++i])
-	{
-		if (!is_space(input_line[i]) && sign_len(&input_line[i]) == 0)
-		{
-			input_line += i;
-			i = -1;
-			while (input_line[++i])
-			{
-				if (is_space(input_line[i]) && !flag.dquote && !flag.squote)
-					break ;
-				else if (sign_len(&input_line[i]) > 0 && !flag.dquote && !flag.squote)
-					break ;
-				if (input_line[i] == '"' && !flag.squote)
-					flag.dquote = !flag.dquote;
-				else if (input_line[i] == '\'' && !flag.dquote)
-					flag.squote = !flag.squote;
-			}
-			data->token_arr[j++].token = ft_substr(input_line, 0, i);
-			if (!data->token_arr[j - 1].token)
-			{
-				perror("ft_substr");
-				free_data(data);
-				return (EXIT_FAILURE);
-			}
-			input_line += i;
-			i = -1;
-		}
-		else if (sign_len(&input_line[i]) > 0 && !flag.dquote && !flag.squote)
-		{
-			data->token_arr[j++].token = ft_substr(input_line, i, sign_len(&input_line[i]));
-			if (!data->token_arr[j - 1].token)
-			{
-				perror("ft_substr");
-				free_data(data);
-				return (EXIT_FAILURE);
-			}
-			input_line += sign_len((char *)&input_line[i]) + i;
-			i = -1;
-		}
-	}
-	return (EXIT_SUCCESS);
+	return (split_token(input_line, data, &flag));
 }
 
 static void	lexer_init(t_data *data, t_lexer_flag *flag)
@@ -117,30 +80,58 @@ static void	count_token(const char *input_line,
 	}
 }
 
-int	main(void)
+static int	copy_word(const char **input_line,
+	t_token *token, int *i, t_lexer_flag *flag)
 {
-	char		*input_line;
-	t_data		data;
-	int			i;
-	const char	*type[] = {"WORD", "PIPE", "REDIRECT_IN", "REDIRECT_OUT",
-		"REDIRECT_HEREDOC", "REDIRECT_APPEND", "PAREN_LEFT",
-		"PAREN_RIGHT", "LOGICAL_AND", "LOGICAL_OR"};
-	int			status;
-
-	while (1)
+	*input_line += *i;
+	*i = -1;
+	while ((*input_line)[++(*i)])
 	{
-		input_line = readline("lexer$ ");
-		if (!input_line)
+		if (is_space((*input_line)[*i]) && !flag->dquote && !flag->squote)
 			break ;
-		status = lexer(input_line, &data);
-		if (status != EXIT_SUCCESS)
-			continue ;
-		assign_token_type(&data);
-		i = -1;
-		while (++i < data.token_num)
+		else if (sign_len(&(*input_line)[*i]) > 0
+			&& !flag->dquote && !flag->squote)
+			break ;
+		if ((*input_line)[*i] == '"' && !flag->squote)
+			flag->dquote = !flag->dquote;
+		else if ((*input_line)[*i] == '\'' && !flag->dquote)
+			flag->squote = !flag->squote;
+	}
+	token->token = ft_substr(*input_line, 0, *i);
+	if (!token->token)
+	{
+		perror("ft_substr");
+		return (EXIT_FAILURE);
+	}
+	*input_line += *i;
+	*i = -1;
+	return (EXIT_SUCCESS);
+}
+
+static int	split_token(const char *input_line,
+	t_data *data, t_lexer_flag *flag)
+{
+	int	i;
+	int	j;
+
+	i = -1;
+	j = 0;
+	while (input_line[++i])
+	{
+		if (!is_space(input_line[i]) && sign_len(&input_line[i]) == 0)
 		{
-			printf("token: [%s]\n", data.token_arr[i].token);
-			printf("type: %s\n", type[data.token_arr[i].type]);
+			if (copy_word(&input_line, &data->token_arr[j++], &i, flag)
+				!= EXIT_SUCCESS)
+				return (free_data(data), EXIT_FAILURE);
+		}
+		else if (sign_len(&input_line[i]) > 0 && !flag->dquote && !flag->squote)
+		{
+			data->token_arr[j++].token
+				= ft_substr(input_line, i, sign_len(&input_line[i]));
+			if (!data->token_arr[j - 1].token)
+				return (perror("ft_substr"), free_data(data), EXIT_FAILURE);
+			input_line += sign_len((char *)&input_line[i]) + i;
+			i = -1;
 		}
 	}
 	return (EXIT_SUCCESS);
