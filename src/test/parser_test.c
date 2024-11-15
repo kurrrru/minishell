@@ -6,7 +6,7 @@
 /*   By: nkawaguc <nkawaguc@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/15 14:24:25 by nkawaguc          #+#    #+#             */
-/*   Updated: 2024/11/15 22:19:46 by nkawaguc         ###   ########.fr       */
+/*   Updated: 2024/11/15 23:18:07 by nkawaguc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,6 +36,9 @@ void	dump_node(t_node *node, int depth)
 			for (int j = 0; j < depth; j++)
 				ft_putstr_fd("  ", STDOUT_FILENO);
 			ft_putstr_fd("redirect: ", STDOUT_FILENO);
+			ft_putnbr_fd(node->redirect[i].type, STDOUT_FILENO);
+			ft_putstr_fd(" ", STDOUT_FILENO);
+			ft_putendl_fd(node->redirect[i].file, STDOUT_FILENO);
 		}
 		for (int i = 0; i < depth; i++)
 			ft_putstr_fd("  ", STDOUT_FILENO);
@@ -74,12 +77,12 @@ void dump_tree(t_node *root)
 	dump_node(root, 0);
 }
 
-int main(int argc, char **argv, char **envp)
+int	main(int argc, char **argv, char **envp)
 {
-	char *input_data;
-	t_data data;
-	t_node *root;
-	t_config config;
+	char		*input_data;
+	t_data		data;
+	t_node		*root;
+	t_config	config;
 
 	(void)argc;
 	(void)argv;
@@ -90,9 +93,16 @@ int main(int argc, char **argv, char **envp)
 		add_history(input_data);
 		if (!input_data)
 			break;
-		lexer(input_data, &data);
+		config.exit_status = lexer(input_data, &data);
+		if (config.exit_status != EXIT_SUCCESS)
+			continue;
 		parser(&root, &data, &config);
 		free_data(&data);
+		if (config.exit_status != EXIT_SUCCESS)
+		{
+			printf("exit_status: %d\n", config.exit_status);
+			continue;
+		}
 		dump_tree(root);
 		free_tree(root);
 		free(input_data);
