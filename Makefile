@@ -2,7 +2,7 @@
 NAME		= 	minishell
 
 # source files
-SRCS		=	$(wildcard src/*/*.c) # Change to specify all source files explicitly later
+SRCS		=	$(wildcard src/*/*.c) src/main.c # Change to specify all source files explicitly later
 
 # object files
 OBJS		=	$(SRCS:.c=.o)
