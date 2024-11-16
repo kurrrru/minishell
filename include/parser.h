@@ -6,7 +6,7 @@
 /*   By: nkawaguc <nkawaguc@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/15 14:18:14 by nkawaguc          #+#    #+#             */
-/*   Updated: 2024/11/16 16:45:58 by nkawaguc         ###   ########.fr       */
+/*   Updated: 2024/11/16 18:51:36 by nkawaguc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,6 +72,8 @@ t_node	*parse_paren_left(t_data *data, t_parse_helper *ps, t_config *config,
 t_node	*parse_paren_right(t_data *data, t_parse_helper *ps, t_config *config,
 			t_node *root);
 t_node	*parse_redirect(t_data *data, t_parse_helper *ps, t_config *config,
+			t_node **root);
+t_node	*parse_command(t_data *data, t_parse_helper *ps, t_config *config,
 			t_node **root);
 void	dump_node(t_node *node, int depth);
 void	dump_tree(t_node *root);
