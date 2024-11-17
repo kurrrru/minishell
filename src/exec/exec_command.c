@@ -6,39 +6,23 @@
 /*   By: nkawaguc <nkawaguc@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/18 00:29:48 by nkawaguc          #+#    #+#             */
-/*   Updated: 2024/11/18 00:33:44 by nkawaguc         ###   ########.fr       */
+/*   Updated: 2024/11/18 01:05:54 by nkawaguc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/exec.h"
 
 static void	set_fd(t_node *node, t_exec *exec);
+static void	constuct_exec(t_exec *exec, t_node *node, t_config *config);
 static void	exec_errors(t_exec *exec);
 
 int	exec_command(t_node *node, int in_fd, int out_fd, t_config *config)
 {
 	t_exec	exec;
-	int		i;
 
 	exec.in_fd = in_fd;
 	exec.out_fd = out_fd;
-	set_fd(node, &exec);
-	exec.command = get_path(node->command);
-	exec.argv = ft_calloc(node->arg_num + 2, sizeof(char *));
-	if (!exec.argv)
-		perror_exit("malloc", EXIT_FAILURE);
-	exec.argv[0] = exec.command;
-	i = -1;
-	while (++i < node->arg_num)
-		exec.argv[i + 1] = node->argv[i];
-	exec.argv[node->arg_num + 1] = NULL;
-	exec.envp = NULL;
-	if (config->envp_num > 0)
-	{
-		exec.envp = make_envp(config);
-		if (!exec.envp)
-			perror_exit("malloc", EXIT_FAILURE);
-	}
+	constuct_exec(&exec, node, config);
 	execve(exec.command, exec.argv, exec.envp);
 	exec_errors(&exec);
 	exit(EXIT_FAILURE);
@@ -63,6 +47,29 @@ static void	exec_errors(t_exec *exec)
 	}
 	perror(exec->command);
 	exit(126);
+}
+
+static void	constuct_exec(t_exec *exec, t_node *node, t_config *config)
+{
+	int	i;
+
+	set_fd(node, exec);
+	exec->command = get_path(node->command);
+	exec->argv = ft_calloc(node->arg_num + 2, sizeof(char *));
+	if (!exec->argv)
+		perror_exit("malloc", EXIT_FAILURE);
+	exec->argv[0] = exec->command;
+	i = -1;
+	while (++i < node->arg_num)
+		exec->argv[i + 1] = node->argv[i];
+	exec->argv[node->arg_num + 1] = NULL;
+	exec->envp = NULL;
+	if (config->envp_num > 0)
+	{
+		exec->envp = make_envp(config);
+		if (!exec->envp)
+			perror_exit("malloc", EXIT_FAILURE);
+	}
 }
 
 static void	set_fd(t_node *node, t_exec *exec)
