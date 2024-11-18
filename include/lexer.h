@@ -6,7 +6,7 @@
 /*   By: nkawaguc <nkawaguc@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/03 22:04:10 by nkawaguc          #+#    #+#             */
-/*   Updated: 2024/11/15 13:50:01 by nkawaguc         ###   ########.fr       */
+/*   Updated: 2024/11/18 12:18:47 by nkawaguc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,7 @@
 # include "include.h"
 # include "macro.h"
 # include "util.h"
+# include "config.h"
 
 typedef enum e_token_type
 {
@@ -54,7 +55,7 @@ int		is_space(char c);
 int		sign_len(const char *s);
 int		flip_quote(const char quote, t_lexer_flag *flag);
 
-int		lexer(const char *input_line, t_data *data);
+int		lexer(const char *input_line, t_data *data, t_config *config);
 int		lexer_split(const char *input_line, t_data *data);
 void	assign_token_type(t_data *data);
 void	free_data(t_data *data);
