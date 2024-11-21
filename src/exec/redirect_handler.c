@@ -6,7 +6,7 @@
 /*   By: nkawaguc <nkawaguc@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/17 14:26:30 by nkawaguc          #+#    #+#             */
-/*   Updated: 2024/11/18 12:07:54 by nkawaguc         ###   ########.fr       */
+/*   Updated: 2024/11/18 19:10:06 by nkawaguc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,17 +41,9 @@ int	redirect_handler(t_node *node, int *in_fd, int *out_fd)
 
 static int	redirect_heredoc(t_node *node, int *in_fd, int i)
 {
-	int	heredoc_fd[2];
-
-	heredoc_fd[0] = -1;
-	heredoc_fd[1] = -1;
-	if (heredoc_read(node, heredoc_fd, i))
-		return (close(heredoc_fd[0]), close(heredoc_fd[1]), EXIT_FAILURE);
 	if (*in_fd != STDIN_FILENO)
 		close(*in_fd);
-	*in_fd = heredoc_fd[0];
-	if (heredoc_fd[1] != STDOUT_FILENO)
-		close(heredoc_fd[1]);
+	*in_fd = node->redirect[i].heredoc_fd;
 	return (EXIT_SUCCESS);
 }
 

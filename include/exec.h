@@ -6,7 +6,7 @@
 /*   By: nkawaguc <nkawaguc@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/16 22:14:35 by nkawaguc          #+#    #+#             */
-/*   Updated: 2024/11/18 00:32:45 by nkawaguc         ###   ########.fr       */
+/*   Updated: 2024/11/18 19:33:45 by nkawaguc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,7 +54,6 @@ char	*get_path(char *command);
 int		is_directory(const char *path);
 
 int		redirect_handler(t_node *node, int *in_fd, int *out_fd);
-int		heredoc_read(t_node *node, int heredoc_fd[2], int i);
 
 void	perror_exit(char *message, int exit_status);
 

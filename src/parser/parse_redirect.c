@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   parser_redirect.c                                  :+:      :+:    :+:   */
+/*   parse_redirect.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: nkawaguc <nkawaguc@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/16 16:16:26 by nkawaguc          #+#    #+#             */
-/*   Updated: 2024/11/16 17:19:28 by nkawaguc         ###   ########.fr       */
+/*   Updated: 2024/11/18 19:20:49 by nkawaguc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,7 @@
 static void		set_redirect_type(t_redirect *redirect, t_token token);
 static t_node	*new_redirect(t_token token, t_token file_token, t_node **root,
 					t_config *config);
+static int		double_redirect(t_config *config, t_node **root);
 
 t_node	*parse_redirect(t_data *data, t_parse_helper *ps,
 	t_config *config, t_node **root)
@@ -63,6 +64,7 @@ static t_node	*new_redirect(t_token token, t_token file_token, t_node **root,
 
 	set_redirect_type(&redirect, token);
 	redirect.file = ft_strdup(file_token.token);
+	redirect.heredoc_fd = -1;
 	if (redirect.file == NULL)
 	{
 		config->exit_status = EXIT_FAILURE;
@@ -70,16 +72,28 @@ static t_node	*new_redirect(t_token token, t_token file_token, t_node **root,
 	}
 	if ((*root)->redirect_num >= (*root)->redirect_capacity)
 	{
-		(*root)->redirect_capacity *= 2;
-		(*root)->redirect = ft_realloc((*root)->redirect,
-				sizeof(t_redirect) * (*root)->redirect_capacity / 2,
-				sizeof(t_redirect) * (*root)->redirect_capacity);
-		if ((*root)->redirect == NULL)
-		{
-			config->exit_status = EXIT_FAILURE;
-			return (perror("malloc"), free_tree(*root), NULL);
-		}
+		if (double_redirect(config, root) == EXIT_FAILURE)
+			return (NULL);
+	}
+	if (redirect.type == HEREDOC && parse_heredoc(&redirect) == EXIT_FAILURE)
+	{
+		config->exit_status = EXIT_FAILURE;
+		return (free_tree(*root), NULL);
 	}
 	(*root)->redirect[(*root)->redirect_num++] = redirect;
 	return (*root);
+}
+
+static int	double_redirect(t_config *config, t_node **root)
+{
+	(*root)->redirect_capacity *= 2;
+	(*root)->redirect = ft_realloc((*root)->redirect,
+			sizeof(t_redirect) * (*root)->redirect_capacity / 2,
+			sizeof(t_redirect) * (*root)->redirect_capacity);
+	if ((*root)->redirect == NULL)
+	{
+		config->exit_status = EXIT_FAILURE;
+		return (perror("ft_realloc"), free_tree(*root), EXIT_FAILURE);
+	}
+	return (EXIT_SUCCESS);
 }
