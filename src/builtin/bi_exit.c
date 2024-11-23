@@ -41,7 +41,7 @@ static bool	is_num(const char *str)
 	if (*str == '-' || *str == '+')
 		if (*str++ == '-')
 			sign = -1l;
-    if (!isdigit(*str))
+    if (!ft_isdigit(*str))
         return (false);
 	while (ft_isdigit(*str))
 	{
