@@ -2,13 +2,13 @@
 
 static void	update_env(t_config *config, const char *key, const char *value);
 static char	*get_env_value(t_config *config, const char *key);
-static void	update_pwd(char old_cwd[1024], char *target_path, char cwd[1024],
+static void	update_pwd(char old_cwd[PATH_MAX], char *target_path, char cwd[PATH_MAX],
 				t_config *config);
 
 void	bi_cd(t_exec exec, t_config *config)
 {
 	char	cwd[PATH_MAX];
-	char	old_cwd[PATH_MAX];
+    char	old_cwd[PATH_MAX];
 	char	*target_path;
 
 	if (!exec.argv[1])
@@ -16,16 +16,16 @@ void	bi_cd(t_exec exec, t_config *config)
 		target_path = get_env_value(config, "HOME");
 		if (!target_path){
 			ft_putendl_fd("cd: HOME not set", STDERR_FILENO);
-            config->exit_status = EXIT_INVALID_INPUT;
+            config->exit_status = EXIT_FAILURE;
         }
 	}
-	else if (ft_strncmp(exec.argv[1], "-", 1) == 0)
+	else if (ft_strcmp(exec.argv[1], "-") == 0)
 	{
 		target_path = get_env_value(config, "OLDPWD");
 		if (!target_path)
         {
             ft_putendl_fd("cd: OLDPWD not set", STDERR_FILENO);
-            config->exit_status = EXIT_INVALID_INPUT;
+            config->exit_status = EXIT_FAILURE;
         }
 	}
 	else
@@ -37,23 +37,28 @@ void	bi_cd(t_exec exec, t_config *config)
 static void	update_pwd(char old_cwd[PATH_MAX], char *target_path, char cwd[PATH_MAX],
 		t_config *config)
 {
-	if (!getcwd(old_cwd, PATH_MAX))
-    {
-        ft_putendl_fd("cd: getcwd", STDERR_FILENO);
-        config->exit_status = EXIT_INVALID_INPUT;
-    }
+    getcwd(old_cwd, PATH_MAX);
 	if (chdir(target_path) != 0)
     {
-        ft_putendl_fd("cd: chdir failed", STDERR_FILENO);
+        perror(target_path);
         config->exit_status = EXIT_INVALID_INPUT;
+        free(old_cwd);
+        return;
     }
-	if (!getcwd(cwd, PATH_MAX))
+    if (!old_cwd)
     {
         ft_putendl_fd("cd: getcwd", STDERR_FILENO);
         config->exit_status = EXIT_INVALID_INPUT;
     }
-	update_env(config, "OLDPWD", old_cwd);
+    if (!getcwd(cwd, PATH_MAX))
+    {
+        ft_putendl_fd("cd: getcwd", STDERR_FILENO);
+        config->exit_status = EXIT_INVALID_INPUT;
+    }
+    update_env(config, "OLDPWD", old_cwd);
 	update_env(config, "PWD", cwd);
+    free(old_cwd);
+    free(cwd);
 }
 
 static void	update_env(t_config *config, const char *key, const char *value)
