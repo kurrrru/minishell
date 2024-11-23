@@ -22,6 +22,7 @@ int	exec_command(t_node *node, int in_fd, int out_fd, t_config *config)
 
 	exec.in_fd = in_fd;
 	exec.out_fd = out_fd;
+	exec.command = NULL;
 	constuct_exec(&exec, node, config);
 	if(!is_builtin_fxn(node))
 	{
