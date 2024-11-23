@@ -48,6 +48,7 @@ int	exec_pipe_left_cmd(t_node *node, t_pipe_helper ph,
 static int	exec_pipe_left_cmd_right_cmd(t_node *node, t_pipe_helper ph,
 		t_config *config)
 {
+	//このnodeもパイプ
 	ph.pid[1] = fork();
 	if (ph.pid[1] == -1)
 		return (perror("fork"), EXIT_FAILURE);

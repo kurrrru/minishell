@@ -15,6 +15,7 @@
 
 # include "parser.h"
 # include "config.h"
+# include "builtin.h"
 # include "util.h"
 # include "macro.h"
 # include "include.h"
