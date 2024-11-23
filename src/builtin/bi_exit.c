@@ -4,20 +4,18 @@ static bool	is_num(const char *str);
 
 void	bi_exit(t_exec exec, t_config *config)
 {
-	int	exit_code;
-
-	exit_code = config->exit_status;
 	if (isatty(STDIN_FILENO))
 		ft_putendl_fd("exit", STDERR_FILENO);
 	if (exec.argv[1])
 	{
 		if (is_num(exec.argv[1]))
 		{
-			exit_code = ft_atoi(exec.argv[1]);
+			config->exit_status = ft_atoi(exec.argv[1]);
 			if (exec.argv[2])
             {
                 ft_putendl_fd("exit: too many arguments", STDERR_FILENO);
-                config->exit_status = EXIT_INVALID_INPUT;
+                config->exit_status = EXIT_FAILURE;
+                return;
             }
 		}
 		else
@@ -25,24 +23,33 @@ void	bi_exit(t_exec exec, t_config *config)
 			ft_putstr_fd("exit: ", STDERR_FILENO);
 			ft_putstr_fd(exec.argv[1], STDERR_FILENO);
 			ft_putendl_fd(": numeric argument required", STDERR_FILENO);
-			config->exit_status = EXIT_INVALID_INPUT;
-            exit_code = EXIT_INVALID_INPUT;
+            config->exit_status = EXIT_FAILURE;
 		}
 	}
-	exit(exit_code);
+	exit(config->exit_status);
 }
 
 static bool	is_num(const char *str)
 {
-	if (!str || *str == '\0')
-		return (false);
-	if (*str == '+' || *str == '-')
+    long	ret;
+	long	sign;
+
+	ret = 0l;
+	sign = 1l;
+	while ((9 <= *str && *str <= 13) || *str == ' ')
 		str++;
-	while (*str)
+	if (*str == '-' || *str == '+')
+		if (*str++ == '-')
+			sign = -1l;
+    if (!isdigit(*str))
+        return (false);
+	while (ft_isdigit(*str))
 	{
-		if (!isdigit(*str))
+		if (ret > LONG_MAX / 10 || (ret == LONG_MAX / 10 && *str > '7'))
 			return (false);
-		str++;
+		if (ret < LONG_MIN / 10 || (ret == LONG_MIN / 10 && *str > '8'))
+			return (false);
+		ret = ret * 10l + (*str++ - '0') * sign;
 	}
-	return (true);
+    return (*str == '\0');
 }
