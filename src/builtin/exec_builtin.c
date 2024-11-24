@@ -6,7 +6,7 @@
 /*   By: nkawaguc <nkawaguc@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/23 21:26:10 by nkawaguc          #+#    #+#             */
-/*   Updated: 2024/11/24 17:27:19 by nkawaguc         ###   ########.fr       */
+/*   Updated: 2024/11/24 18:33:57 by nkawaguc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,19 +15,19 @@
 void	set_builtin_path(t_exec *exec, t_node *node)
 {
 	if (ft_strcmp(node->command, "echo") == 0)
-		exec->command = "echo";
+		exec->command = ft_strdup("echo");
 	else if (ft_strcmp(node->command, "cd") == 0)
-		exec->command = "cd";
+		exec->command = ft_strdup("cd");
 	else if (ft_strcmp(node->command, "pwd") == 0)
-		exec->command = "pwd";
+		exec->command = ft_strdup("pwd");
 	else if (ft_strcmp(node->command, "export") == 0)
-		exec->command = "export";
+		exec->command = ft_strdup("export");
 	else if (ft_strcmp(node->command, "unset") == 0)
-		exec->command = "unset";
+		exec->command = ft_strdup("unset");
 	else if (ft_strcmp(node->command, "env") == 0)
-		exec->command = "env";
+		exec->command = ft_strdup("env");
 	else if (ft_strcmp(node->command, "exit") == 0)
-		exec->command = "exit";
+		exec->command = ft_strdup("exit");
 }
 
 bool	is_builtin_fxn(t_node *node)

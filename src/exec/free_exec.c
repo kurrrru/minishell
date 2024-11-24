@@ -1,23 +1,23 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   run_node.c                                         :+:      :+:    :+:   */
+/*   free_exec.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: nkawaguc <nkawaguc@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/11/16 22:23:25 by nkawaguc          #+#    #+#             */
-/*   Updated: 2024/11/24 18:26:14 by nkawaguc         ###   ########.fr       */
+/*   Created: 2024/11/24 18:22:29 by nkawaguc          #+#    #+#             */
+/*   Updated: 2024/11/24 18:34:50 by nkawaguc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/exec.h"
 
-int	run_node(t_node *node, int in_fd, int out_fd, t_config *config)
+void	free_exec(t_exec *exec)
 {
-	if (node->type == NODE_LOGICAL_AND || node->type == NODE_LOGICAL_OR)
-		return (exec_logical_connectors(node, in_fd, out_fd, config));
-	else if (node->type == NODE_PIPE)
-		return (exec_pipe(node, in_fd, out_fd, config));
-	exec_command(node, in_fd, out_fd, config);
-	exit(config->exit_status);
+	if (exec->command)
+		free(exec->command);
+	if (exec->argv)
+		free_2d(exec->argv);
+	if (exec->envp)
+		free_2d(exec->envp);
 }
