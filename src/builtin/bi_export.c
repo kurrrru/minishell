@@ -1,5 +1,16 @@
-#include "../../include/exec.h"
-#include "builtin.h"
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   bi_export.c                                        :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: nkawaguc <nkawaguc@student.42tokyo.jp>     +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/11/23 21:26:01 by nkawaguc          #+#    #+#             */
+/*   Updated: 2024/11/24 17:31:38 by nkawaguc         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
+#include "../../include/builtin.h"
 
 static bool	is_valid_env_name(char *name);
 static void	add_or_update_env(t_config *config, const char *key,
@@ -16,18 +27,18 @@ void	bi_export(t_exec exec, t_config *config)
 
 	i = 1;
 	if (!exec.argv[i])
-    {
-        config->exit_status = EXIT_SUCCESS;
-        return (export_no_argv(config));
-    }
+	{
+		config->exit_status = EXIT_SUCCESS;
+		return (export_no_argv(config));
+	}
 	while (exec.argv[i])
 	{
 		arg = exec.argv[i++];
 		equal_sign = ft_strchr(arg, '=');
 		if (equal_sign)
 		{
-			if(update_key_value(arg, equal_sign, config) == 1)
-                return;
+			if (update_key_value(arg, equal_sign, config) == 1)
+				return ;
 		}
 		else
 		{
@@ -37,7 +48,7 @@ void	bi_export(t_exec exec, t_config *config)
 				print_invalid_identifier(arg, config);
 		}
 	}
-    config->exit_status = EXIT_SUCCESS;
+	config->exit_status = EXIT_SUCCESS;
 }
 
 static int	update_key_value(char *arg, char *equal_sign, t_config *config)
@@ -45,26 +56,26 @@ static int	update_key_value(char *arg, char *equal_sign, t_config *config)
 	char	*key;
 	char	*value;
 
-    key = ft_substr(arg, 0, equal_sign - arg);
-    if(!key)
-    {
-        ft_putstr_fd("substr failed", STDERR_FILENO);
-        config->exit_status = EXIT_FAILURE;
-        return (1);
-    }
+	key = ft_substr(arg, 0, equal_sign - arg);
+	if (!key)
+	{
+		ft_putstr_fd("substr failed", STDERR_FILENO);
+		config->exit_status = EXIT_FAILURE;
+		return (1);
+	}
 	value = ft_strdup(equal_sign + 1);
-    if(!value)  
-    {
-        free(key);
-        ft_putstr_fd("strdup failed", STDERR_FILENO);
-        config->exit_status = EXIT_FAILURE;
-        return (1);
-    }
+	if (!value)
+	{
+		free(key);
+		ft_putstr_fd("strdup failed", STDERR_FILENO);
+		config->exit_status = EXIT_FAILURE;
+		return (1);
+	}
 	if (is_valid_env_name(key))
 		add_or_update_env(config, key, value);
 	free(key);
 	free(value);
-    return (0);
+	return (0);
 }
 
 static void	print_invalid_identifier(char *arg, t_config *config)
@@ -72,7 +83,7 @@ static void	print_invalid_identifier(char *arg, t_config *config)
 	ft_putstr_fd("export: ", STDERR_FILENO);
 	ft_putstr_fd(arg, STDERR_FILENO);
 	ft_putendl_fd(": not a valid identifier\n", STDERR_FILENO);
-    config->exit_status = EXIT_INVALID_INPUT;
+	config->exit_status = EXIT_INVALID_INPUT;
 }
 
 static void	export_no_argv(t_config *config)
@@ -86,9 +97,9 @@ static void	export_no_argv(t_config *config)
 		ft_putstr_fd(config->envp[j].key, STDOUT_FILENO);
 		ft_putstr_fd("=\"", STDOUT_FILENO);
 		ft_putstr_fd(config->envp[j].value, STDOUT_FILENO);
-        ft_putendl_fd("\"", STDOUT_FILENO);
+		ft_putendl_fd("\"", STDOUT_FILENO);
 	}
-    config->exit_status = EXIT_SUCCESS;
+	config->exit_status = EXIT_SUCCESS;
 	return ;
 }
 

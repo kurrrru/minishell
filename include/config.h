@@ -6,7 +6,7 @@
 /*   By: nkawaguc <nkawaguc@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/15 13:13:01 by nkawaguc          #+#    #+#             */
-/*   Updated: 2024/11/15 13:19:35 by nkawaguc         ###   ########.fr       */
+/*   Updated: 2024/11/24 17:38:55 by nkawaguc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,6 +28,7 @@ typedef struct s_config
 	t_env	*envp;
 	int		envp_num;
 	int		envp_capacity;
+	int		is_child;
 }	t_config;
 
 int		init_config(t_config *config, char **envp);

@@ -1,17 +1,29 @@
-#include "../../include/exec.h"
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   bi_pwd.c                                           :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: nkawaguc <nkawaguc@student.42tokyo.jp>     +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/11/23 21:25:55 by nkawaguc          #+#    #+#             */
+/*   Updated: 2024/11/24 17:33:12 by nkawaguc         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
 
-void bi_pwd(t_config *config)
+#include "../../include/builtin.h"
+
+void	bi_pwd(t_config *config)
 {
-    char cwd[PATH_MAX];
+	char	cwd[PATH_MAX];
 
-    if(getcwd(cwd, PATH_MAX))
-    {
-        ft_putendl_fd(cwd, STDOUT_FILENO);
-        config->exit_status = EXIT_SUCCESS;
-    }
-    else    
-    {
-        ft_putendl_fd("getcwd", EXIT_FAILURE);
-        config->exit_status = EXIT_INVALID_INPUT;
-    }    
+	if (getcwd(cwd, PATH_MAX))
+	{
+		ft_putendl_fd(cwd, STDOUT_FILENO);
+		config->exit_status = EXIT_SUCCESS;
+	}
+	else
+	{
+		perror("getcwd");
+		config->exit_status = EXIT_FAILURE;
+	}
 }

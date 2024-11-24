@@ -6,7 +6,7 @@
 /*   By: nkawaguc <nkawaguc@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/05 23:03:58 by nkawaguc          #+#    #+#             */
-/*   Updated: 2024/11/17 01:58:22 by nkawaguc         ###   ########.fr       */
+/*   Updated: 2024/11/24 12:43:35 by nkawaguc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,5 +27,7 @@ void	free_2d(char **arr);
 
 void	*xmalloc(size_t size);
 void	*xrealloc(void *ptr, size_t old_size, size_t new_size);
+
+int		extract_status(int status);
 
 #endif

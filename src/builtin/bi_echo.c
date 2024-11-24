@@ -1,4 +1,16 @@
-#include "../../include/exec.h"
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   bi_echo.c                                          :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: nkawaguc <nkawaguc@student.42tokyo.jp>     +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/11/23 21:26:21 by nkawaguc          #+#    #+#             */
+/*   Updated: 2024/11/23 21:32:20 by nkawaguc         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
+#include "../../include/builtin.h"
 
 static bool	check_echo_flag(char *argv);
 
@@ -23,7 +35,7 @@ void	bi_echo(t_exec exec, t_config *config)
 	}
 	if (!nflag)
 		ft_putchar_fd('\n', STDOUT_FILENO);
-    config->exit_status = EXIT_SUCCESS;
+	config->exit_status = EXIT_SUCCESS;
 }
 
 static bool	check_echo_flag(char *argv)

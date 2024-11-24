@@ -6,11 +6,13 @@
 /*   By: nkawaguc <nkawaguc@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/15 13:12:48 by nkawaguc          #+#    #+#             */
-/*   Updated: 2024/11/15 13:39:47 by nkawaguc         ###   ########.fr       */
+/*   Updated: 2024/11/24 17:41:31 by nkawaguc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/config.h"
+
+static int	get_envp_len(char **envp);
 
 int	init_config(t_config *config, char **envp)
 {
@@ -18,9 +20,8 @@ int	init_config(t_config *config, char **envp)
 	char	*equal;
 
 	config->exit_status = 0;
-	i = 0;
-	while (envp[i])
-		i++;
+	config->is_child = 0;
+	i = get_envp_len(envp);
 	config->envp = ft_calloc(i + 1, sizeof(t_env));
 	if (config->envp == NULL)
 		return (EXIT_FAILURE);
@@ -39,4 +40,14 @@ int	init_config(t_config *config, char **envp)
 		i++;
 	}
 	return (EXIT_SUCCESS);
+}
+
+static int	get_envp_len(char **envp)
+{
+	int	i;
+
+	i = 0;
+	while (envp[i])
+		i++;
+	return (i);
 }
