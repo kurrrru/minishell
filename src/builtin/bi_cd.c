@@ -6,7 +6,7 @@
 /*   By: nkawaguc <nkawaguc@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/23 21:26:25 by nkawaguc          #+#    #+#             */
-/*   Updated: 2024/11/24 18:37:21 by nkawaguc         ###   ########.fr       */
+/*   Updated: 2024/11/24 19:58:24 by nkawaguc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,7 +82,7 @@ static void	update_env(t_config *config, const char *key, const char *value)
 	i = -1;
 	while (++i < config->envp_num)
 	{
-		if (ft_strncmp(config->envp[i].key, key, ft_strlen(key)) == 0)
+		if (ft_strcmp(config->envp[i].key, key) == 0)
 		{
 			free(config->envp[i].value);
 			config->envp[i].value = ft_strdup(value);
