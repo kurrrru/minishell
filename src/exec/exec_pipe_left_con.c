@@ -6,7 +6,7 @@
 /*   By: nkawaguc <nkawaguc@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/17 23:55:25 by nkawaguc          #+#    #+#             */
-/*   Updated: 2024/11/18 00:23:32 by nkawaguc         ###   ########.fr       */
+/*   Updated: 2024/11/24 17:15:48 by nkawaguc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,7 +52,7 @@ static int	exec_pipe_left_con_right_cmd(t_node *node, t_pipe_helper ph,
 		run_node(node->left, ph.in_fd, ph.pipe_fd[1], config);
 		close(ph.pipe_fd[1]);
 		waitpid(ph.pid[1], &config->exit_status, 0);
-		config->exit_status = WEXITSTATUS(config->exit_status);
+		config->exit_status = extract_status(config->exit_status);
 	}
 	return (config->exit_status);
 }

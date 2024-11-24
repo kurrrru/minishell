@@ -6,7 +6,7 @@
 /*   By: nkawaguc <nkawaguc@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/17 23:46:11 by nkawaguc          #+#    #+#             */
-/*   Updated: 2024/11/18 00:24:42 by nkawaguc         ###   ########.fr       */
+/*   Updated: 2024/11/24 17:42:19 by nkawaguc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,6 +28,7 @@ int	exec_pipe_left_cmd(t_node *node, t_pipe_helper ph,
 		close(ph.pipe_fd[0]);
 		if (ph.out_fd != STDOUT_FILENO)
 			close(ph.out_fd);
+		config->is_child = 1;
 		run_node(node->left, ph.in_fd, ph.pipe_fd[1], config);
 	}
 	else
@@ -52,13 +53,16 @@ static int	exec_pipe_left_cmd_right_cmd(t_node *node, t_pipe_helper ph,
 	if (ph.pid[1] == -1)
 		return (perror("fork"), EXIT_FAILURE);
 	if (ph.pid[1] == 0)
+	{
+		config->is_child = 1;
 		run_node(node->right, ph.pipe_fd[0], ph.out_fd, config);
+	}
 	else
 	{
 		close(ph.pipe_fd[0]);
 		waitpid(ph.pid[0], NULL, 0);
 		waitpid(ph.pid[1], &config->exit_status, 0);
-		config->exit_status = WEXITSTATUS(config->exit_status);
+		config->exit_status = extract_status(config->exit_status);
 	}
 	return (config->exit_status);
 }

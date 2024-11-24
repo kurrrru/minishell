@@ -6,7 +6,7 @@
 /*   By: nkawaguc <nkawaguc@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/16 22:14:35 by nkawaguc          #+#    #+#             */
-/*   Updated: 2024/11/18 19:33:45 by nkawaguc         ###   ########.fr       */
+/*   Updated: 2024/11/24 18:26:33 by nkawaguc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,7 @@
 
 # include "parser.h"
 # include "config.h"
+# include "builtin.h"
 # include "util.h"
 # include "macro.h"
 # include "include.h"
@@ -56,5 +57,7 @@ int		is_directory(const char *path);
 int		redirect_handler(t_node *node, int *in_fd, int *out_fd);
 
 void	perror_exit(char *message, int exit_status);
+
+void	free_exec(t_exec *exec);
 
 #endif

@@ -6,7 +6,7 @@
 /*   By: nkawaguc <nkawaguc@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/18 00:29:48 by nkawaguc          #+#    #+#             */
-/*   Updated: 2024/11/18 01:05:54 by nkawaguc         ###   ########.fr       */
+/*   Updated: 2024/11/24 18:39:09 by nkawaguc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,10 +22,20 @@ int	exec_command(t_node *node, int in_fd, int out_fd, t_config *config)
 
 	exec.in_fd = in_fd;
 	exec.out_fd = out_fd;
+	exec.command = NULL;
 	constuct_exec(&exec, node, config);
-	execve(exec.command, exec.argv, exec.envp);
-	exec_errors(&exec);
-	exit(EXIT_FAILURE);
+	if (!is_builtin_fxn(node))
+	{
+		execve(exec.command, exec.argv, exec.envp);
+		exec_errors(&exec);
+		return (EXIT_FAILURE);
+	}
+	else
+	{
+		exec_bi_command(exec, config);
+		free_exec(&exec);
+		return (config->exit_status);
+	}
 }
 
 static void	exec_errors(t_exec *exec)
@@ -54,14 +64,18 @@ static void	constuct_exec(t_exec *exec, t_node *node, t_config *config)
 	int	i;
 
 	set_fd(node, exec);
-	exec->command = get_path(node->command);
+	if (!node->command)
+		exit(EXIT_SUCCESS);
+	set_builtin_path(exec, node);
+	if (!exec->command)
+		exec->command = get_path(node->command);
 	exec->argv = ft_calloc(node->arg_num + 2, sizeof(char *));
 	if (!exec->argv)
 		perror_exit("malloc", EXIT_FAILURE);
-	exec->argv[0] = exec->command;
+	exec->argv[0] = ft_strdup(exec->command);
 	i = -1;
 	while (++i < node->arg_num)
-		exec->argv[i + 1] = node->argv[i];
+		exec->argv[i + 1] = ft_strdup(node->argv[i]);
 	exec->argv[node->arg_num + 1] = NULL;
 	exec->envp = NULL;
 	if (config->envp_num > 0)
