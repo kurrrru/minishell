@@ -6,7 +6,7 @@
 /*   By: nkawaguc <nkawaguc@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/16 22:27:01 by nkawaguc          #+#    #+#             */
-/*   Updated: 2024/11/24 17:35:46 by nkawaguc         ###   ########.fr       */
+/*   Updated: 2024/11/25 12:15:07 by nkawaguc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,7 @@ int	main(int argc, char **argv, char **envp)
 	root = NULL;
 	main_loop(&config, input_data, root, &data);
 	free_config(&config);
-	return (EXIT_SUCCESS);
+	return (config.exit_status);
 }
 
 static void	main_loop(t_config *config,
