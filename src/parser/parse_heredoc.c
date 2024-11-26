@@ -6,7 +6,7 @@
 /*   By: nkawaguc <nkawaguc@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/17 22:54:55 by nkawaguc          #+#    #+#             */
-/*   Updated: 2024/11/26 21:42:19 by nkawaguc         ###   ########.fr       */
+/*   Updated: 2024/11/26 21:43:08 by nkawaguc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,7 +36,7 @@ int	parse_heredoc(t_redirect *redirect)
 
 static int	heredoc_read(t_redirect *redirect, int heredoc_fd[2])
 {
-	pid_t pid;
+    pid_t pid;
 
     set_heredoc_handler();
     pid = fork();
