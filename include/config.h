@@ -6,7 +6,7 @@
 /*   By: nkawaguc <nkawaguc@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/15 13:13:01 by nkawaguc          #+#    #+#             */
-/*   Updated: 2024/11/26 21:34:41 by nkawaguc         ###   ########.fr       */
+/*   Updated: 2024/11/26 21:39:49 by nkawaguc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,6 @@ typedef struct s_config
 {
 	int		exit_status;
 	int		interrupted;
-	int		last_exit_status;
 	t_env	*envp;
 	int		envp_num;
 	int		envp_capacity;

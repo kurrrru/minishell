@@ -6,7 +6,7 @@
 /*   By: nkawaguc <nkawaguc@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/17 22:54:55 by nkawaguc          #+#    #+#             */
-/*   Updated: 2024/11/26 21:37:56 by nkawaguc         ###   ########.fr       */
+/*   Updated: 2024/11/26 21:42:19 by nkawaguc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,7 +36,7 @@ int	parse_heredoc(t_redirect *redirect)
 
 static int	heredoc_read(t_redirect *redirect, int heredoc_fd[2])
 {
-	    pid_t pid;
+	pid_t pid;
 
     set_heredoc_handler();
     pid = fork();
@@ -67,29 +67,4 @@ static int	heredoc_read(t_redirect *redirect, int heredoc_fd[2])
         config->exit_status = extract_status(config->exit_status);
     }
     return EXIT_SUCCESS;
-
-	char	*line;
-	char	*expanded;
-
-	del_quote(redirect->file);
-	while (1)
-	{
-		line = readline("> ");
-		if (!line)
-		{
-			ft_putstr_fd("bash: warning: here-document \
-delimited by end-of-file (wanted `", STDERR_FILENO);
-			ft_putstr_fd(redirect->file, STDERR_FILENO);
-			ft_putendl_fd("')", STDERR_FILENO);
-			return (EXIT_SUCCESS);
-		}
-		if (ft_strcmp(line, redirect->file) == 0)
-			return (free(line), EXIT_SUCCESS);
-		expanded = expand_env_heredoc_content(line, config);
-		if (!expanded)
-			return (free(line), EXIT_FAILURE);
-		ft_putendl_fd(expanded, heredoc_fd[1]);
-		free(expanded);
-	}
-	return (EXIT_SUCCESS);
 }
