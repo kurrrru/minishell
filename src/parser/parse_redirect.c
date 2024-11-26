@@ -75,7 +75,7 @@ static t_node	*new_redirect(t_token token, t_token file_token, t_node **root,
 		if (double_redirect(config, root) == EXIT_FAILURE)
 			return (NULL);
 	}
-	if (redirect.type == HEREDOC && parse_heredoc(&redirect) == EXIT_FAILURE)
+	if (redirect.type == HEREDOC && parse_heredoc(&redirect, config) == EXIT_FAILURE)
 	{
 		config->exit_status = EXIT_FAILURE;
 		return (free_tree(*root), NULL);

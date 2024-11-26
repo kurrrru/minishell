@@ -13,7 +13,7 @@
 #include "../../include/exec.h"
 
 static void	set_fd(t_node *node, t_exec *exec);
-static void	constuct_exec(t_exec *exec, t_node *node, t_config *config);
+static void	construct_exec(t_exec *exec, t_node *node, t_config *config);
 static void	exec_errors(t_exec *exec);
 
 int	exec_command(t_node *node, int in_fd, int out_fd, t_config *config)
@@ -23,15 +23,18 @@ int	exec_command(t_node *node, int in_fd, int out_fd, t_config *config)
 	exec.in_fd = in_fd;
 	exec.out_fd = out_fd;
 	exec.command = NULL;
-	constuct_exec(&exec, node, config);
 	if (!is_builtin_fxn(node))
 	{
+		construct_exec(&exec, node, config);
 		execve(exec.command, exec.argv, exec.envp);
 		exec_errors(&exec);
 		return (EXIT_FAILURE);
 	}
 	else
 	{
+		construct_bi_exec(&exec, node, config);
+		if(config->exit_status != EXIT_SUCCESS)
+			return (config->exit_status);
 		exec_bi_command(exec, config);
 		free_exec(&exec);
 		return (config->exit_status);
@@ -59,7 +62,7 @@ static void	exec_errors(t_exec *exec)
 	exit(126);
 }
 
-static void	constuct_exec(t_exec *exec, t_node *node, t_config *config)
+static void	construct_exec(t_exec *exec, t_node *node, t_config *config)
 {
 	int	i;
 

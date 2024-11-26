@@ -14,6 +14,7 @@
 # define PARSER_H
 
 # include "lexer.h"
+# include "signals.h"
 # include "config.h"
 # include "macro.h"
 # include "include.h"
@@ -75,7 +76,7 @@ t_node	*parse_paren_right(t_data *data, t_parse_helper *ps, t_config *config,
 			t_node *root);
 t_node	*parse_redirect(t_data *data, t_parse_helper *ps, t_config *config,
 			t_node **root);
-int		parse_heredoc(t_redirect *redirect);
+int		parse_heredoc(t_redirect *redirect, t_config *config);
 t_node	*parse_command(t_data *data, t_parse_helper *ps, t_config *config,
 			t_node **root);
 void	dump_node(t_node *node, int depth);

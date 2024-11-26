@@ -15,6 +15,7 @@
 
 # include "parser.h"
 # include "config.h"
+# include "signals.h"
 # include "builtin.h"
 # include "util.h"
 # include "macro.h"
@@ -60,5 +61,6 @@ int		redirect_handler(t_node *node, int *in_fd, int *out_fd);
 void	perror_exit(char *message, int exit_status);
 
 void	free_exec(t_exec *exec);
+void	construct_bi_exec(t_exec *exec, t_node *node, t_config *config);
 
 #endif

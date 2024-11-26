@@ -31,6 +31,7 @@ int	run_tree(t_node *root, int in_fd, int out_fd, t_config *config)
 		}
 		if (pid == 0)
 		{
+			set_exec_child_handler();
 			config->is_child = 1;
 			exec_command(root, in_fd, out_fd, config);
 		}
