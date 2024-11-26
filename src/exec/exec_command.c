@@ -6,7 +6,7 @@
 /*   By: nkawaguc <nkawaguc@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/18 00:29:48 by nkawaguc          #+#    #+#             */
-/*   Updated: 2024/11/24 18:39:09 by nkawaguc         ###   ########.fr       */
+/*   Updated: 2024/11/26 23:01:48 by nkawaguc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,12 +32,7 @@ int	exec_command(t_node *node, int in_fd, int out_fd, t_config *config)
 	}
 	else
 	{
-		construct_bi_exec(&exec, node, config);
-		if(config->exit_status != EXIT_SUCCESS)
-			return (config->exit_status);
-		exec_bi_command(exec, config);
-		free_exec(&exec);
-		return (config->exit_status);
+		return (exec_bi(node, &exec, config));
 	}
 }
 

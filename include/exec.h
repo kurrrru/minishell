@@ -6,7 +6,7 @@
 /*   By: nkawaguc <nkawaguc@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/16 22:14:35 by nkawaguc          #+#    #+#             */
-/*   Updated: 2024/11/26 20:34:43 by nkawaguc         ###   ########.fr       */
+/*   Updated: 2024/11/26 23:01:36 by nkawaguc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,6 +55,7 @@ int		exec_command(t_node *node, int in_fd, int out_fd, t_config *config);
 char	**make_envp(t_config *config);
 char	*get_path(char *command);
 int		is_directory(const char *path);
+int		exec_bi(t_node *node, t_exec *exec, t_config *config);
 
 int		redirect_handler(t_node *node, int *in_fd, int *out_fd);
 
