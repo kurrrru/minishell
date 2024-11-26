@@ -6,7 +6,7 @@
 /*   By: nkawaguc <nkawaguc@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/26 20:04:34 by nkawaguc          #+#    #+#             */
-/*   Updated: 2024/11/27 00:06:20 by nkawaguc         ###   ########.fr       */
+/*   Updated: 2024/11/27 01:21:46 by nkawaguc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -105,8 +105,8 @@ static int	expand_redirect(t_node *node, t_config *config)
 	int		i;
 	char	**expanded;
 
-	i = 0;
-	while (i < node->redirect_num)
+	i = -1;
+	while (++i < node->redirect_num)
 	{
 		if (node->redirect[i].type == HEREDOC)
 			continue ;
@@ -121,7 +121,6 @@ static int	expand_redirect(t_node *node, t_config *config)
 		free(node->redirect[i].file);
 		node->redirect[i].file = expanded[0];
 		free(expanded);
-		i++;
 	}
 	return (EXIT_SUCCESS);
 }
