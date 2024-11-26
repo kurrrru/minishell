@@ -20,11 +20,13 @@ static int	exec_pipe_left_cmd_right_con(t_node *node, t_pipe_helper ph,
 int	exec_pipe_left_cmd(t_node *node, t_pipe_helper ph,
 		t_config *config)
 {
+	set_exec_handler();
 	ph.pid[0] = fork();
 	if (ph.pid[0] == -1)
 		return (perror("fork"), EXIT_FAILURE);
 	if (ph.pid[0] == 0)
 	{
+		set_exec_child_handler();
 		close(ph.pipe_fd[0]);
 		if (ph.out_fd != STDOUT_FILENO)
 			close(ph.out_fd);
@@ -49,11 +51,13 @@ int	exec_pipe_left_cmd(t_node *node, t_pipe_helper ph,
 static int	exec_pipe_left_cmd_right_cmd(t_node *node, t_pipe_helper ph,
 		t_config *config)
 {
+	set_exec_handler();
 	ph.pid[1] = fork();
 	if (ph.pid[1] == -1)
 		return (perror("fork"), EXIT_FAILURE);
 	if (ph.pid[1] == 0)
 	{
+		set_exec_child_handler();
 		config->is_child = 1;
 		run_node(node->right, ph.pipe_fd[0], ph.out_fd, config);
 	}

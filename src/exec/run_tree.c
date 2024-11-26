@@ -20,6 +20,7 @@ int	run_tree(t_node *root, int in_fd, int out_fd, t_config *config)
 		return (EXIT_SUCCESS);
 	if (root->type == NODE_COMMAND)
 	{
+		set_exec_handler();
 		if (is_builtin_fxn(root))
 			return (exec_command(root, in_fd, out_fd, config));
 		pid = fork();
@@ -30,6 +31,7 @@ int	run_tree(t_node *root, int in_fd, int out_fd, t_config *config)
 		}
 		if (pid == 0)
 		{
+			set_exec_child_handler();
 			config->is_child = 1;
 			run_node(root, in_fd, out_fd, config);
 		}

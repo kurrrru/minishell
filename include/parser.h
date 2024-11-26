@@ -14,6 +14,7 @@
 # define PARSER_H
 
 # include "lexer.h"
+# include "signals.h"
 # include "config.h"
 # include "macro.h"
 # include "include.h"

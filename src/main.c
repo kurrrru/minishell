@@ -41,6 +41,8 @@ static void	main_loop(t_config *config,
 {
 	while (1)
 	{
+		g_signal = 0;
+		set_idle_handler();
 		input_data = readline("minishell$ ");
 		add_history(input_data);
 		if (!input_data)
@@ -58,6 +60,9 @@ static void	main_loop(t_config *config,
 		assign_token_type(data);
 		parser(&root, data, config);
 		free_data(data);
+		if(g_signal != 0)
+			continue ;
+		//update exit status if needed
 		if (config->exit_status != EXIT_SUCCESS)
 			continue ;
 		config->exit_status
