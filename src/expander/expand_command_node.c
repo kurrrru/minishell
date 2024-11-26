@@ -6,7 +6,7 @@
 /*   By: nkawaguc <nkawaguc@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/26 20:04:34 by nkawaguc          #+#    #+#             */
-/*   Updated: 2024/11/26 21:12:45 by nkawaguc         ###   ########.fr       */
+/*   Updated: 2024/11/27 00:06:20 by nkawaguc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,11 +17,9 @@ static int	expand_redirect(t_node *node, t_config *config);
 
 int	expand_command_node(t_node *node, t_config *config)
 {
-	printf("expand_command_node\n");
 	config->exit_status = expand_command_and_arg(node, config);
 	if (config->exit_status != EXIT_SUCCESS)
 		return (config->exit_status);
-	printf("expand_command_and_arg done\n");
 	config->exit_status = expand_redirect(node, config);
 	if (config->exit_status != EXIT_SUCCESS)
 		return (config->exit_status);
@@ -49,7 +47,6 @@ static int	expand_command_and_arg(t_node *node, t_config *config)
 		free_3d(expanded_arr);
 		return (EXIT_FAILURE);
 	}
-	printf("Here\n");
 	i = -1;
 	while (++i < node->arg_num)
 	{
@@ -86,16 +83,12 @@ static int	expand_command_and_arg(t_node *node, t_config *config)
 		k++;
 	}
 	free(expanded_arr[0]);
-	printf("node->arg_num: %d\n", node->arg_num);
-	printf("(i,j,k): (%d,%d,%d)\n", i, j, k);
-	printf("node->capacity: %d\n", node->arg_capacity);
 	while (j < node->arg_num)
 	{
 		k = 0;
 		while (expanded_arr[j + 1][k])
 		{
 			node->argv[i] = expanded_arr[j + 1][k];
-			printf("node->argv[%d]: %s\n", i, node->argv[i]);
 			i++;
 			k++;
 		}
@@ -112,8 +105,6 @@ static int	expand_redirect(t_node *node, t_config *config)
 	int		i;
 	char	**expanded;
 
-	printf("expand_redirect\n");
-	printf("node->redirect_num: %d\n", node->redirect_num);
 	i = 0;
 	while (i < node->redirect_num)
 	{

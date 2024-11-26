@@ -6,7 +6,7 @@
 /*   By: nkawaguc <nkawaguc@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/23 21:26:01 by nkawaguc          #+#    #+#             */
-/*   Updated: 2024/11/24 20:42:21 by nkawaguc         ###   ########.fr       */
+/*   Updated: 2024/11/27 00:08:19 by nkawaguc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -142,11 +142,12 @@ static void	add_or_update_env(t_config *config, const char *key,
 		}
 		i++;
 	}
-	if (config->envp_num >= config->envp_capacity)
+	if (config->envp_num >= config->envp_capacity - 1)
 	{
 		config->envp_capacity *= 2;
-		config->envp = realloc(config->envp, config->envp_capacity
-				* sizeof(t_env));
+		config->envp = ft_realloc(config->envp,
+				sizeof(t_env) * config->envp_capacity / 2,
+				sizeof(t_env) * config->envp_capacity);
 	}
 	config->envp[config->envp_num].key = ft_strdup(key);
 	if (value)
