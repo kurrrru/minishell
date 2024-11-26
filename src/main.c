@@ -12,6 +12,8 @@
 
 #include "../include/minishell.h"
 
+extern sig_atomic_t g_signal;
+
 static void	main_loop(t_config *config,
 				char *input_data, t_node *root, t_data *data);
 
@@ -36,12 +38,25 @@ int	main(int argc, char **argv, char **envp)
 	return (config.exit_status);
 }
 
+int event(void)
+{
+	return (0);
+}
+
 static void	main_loop(t_config *config,
 				char *input_data, t_node *root, t_data *data)
 {
 	while (1)
 	{
+		g_signal = 0;
+		rl_event_hook = event;
+		set_idle_handler();
 		input_data = readline("minishell$ ");
+		if(g_signal != 0)
+		{
+			config->exit_status = 130;
+			continue ;
+		}
 		add_history(input_data);
 		if (!input_data)
 		{
@@ -58,6 +73,8 @@ static void	main_loop(t_config *config,
 		assign_token_type(data);
 		parser(&root, data, config);
 		free_data(data);
+		if (g_signal != 0)
+			continue ;
 		if (config->exit_status != EXIT_SUCCESS)
 			continue ;
 		config->exit_status

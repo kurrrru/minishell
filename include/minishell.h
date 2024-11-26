@@ -16,6 +16,7 @@
 # include "lexer.h"
 # include "parser.h"
 # include "config.h"
+# include "signals.h"
 # include "exec.h"
 # include "util.h"
 # include "macro.h"

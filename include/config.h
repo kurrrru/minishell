@@ -25,6 +25,7 @@ typedef struct s_env
 typedef struct s_config
 {
 	int		exit_status;
+	int		interrupted;
 	t_env	*envp;
 	int		envp_num;
 	int		envp_capacity;

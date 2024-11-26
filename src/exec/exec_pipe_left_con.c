@@ -34,11 +34,13 @@ int	exec_pipe_left_con(t_node *node, t_pipe_helper ph,
 static int	exec_pipe_left_con_right_cmd(t_node *node, t_pipe_helper ph,
 		t_config *config)
 {
+	set_exec_handler();
 	ph.pid[1] = fork();
 	if (ph.pid[1] == -1)
 		return (perror("fork"), EXIT_FAILURE);
 	if (ph.pid[1] == 0)
 	{
+		set_exec_child_handler();
 		close(ph.pipe_fd[1]);
 		if (ph.in_fd != STDIN_FILENO)
 			close(ph.in_fd);
