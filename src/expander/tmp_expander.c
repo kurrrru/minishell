@@ -17,40 +17,6 @@ dquotation内では展開される
 #include <readline/readline.h>
 #include <readline/history.h>
 
-int ft_isalpha(int c)
-{
-	return ((c >= 'A' && c <= 'Z') || (c >= 'a' && c <= 'z'));
-}
-int ft_isalnum(int c)
-{
-	return (ft_isalpha(c) || (c >= '0' && c <= '9'));
-}
-char *ft_strjoin(const char *s1, const char *s2)
-{
-	if (!s1 || !s2)
-		return NULL;
-	//strlen, strcpy, strcatを置き換える
-	size_t len1 = strlen(s1);
-	size_t len2 = strlen(s2);
-
-	char *result = malloc(len1 + len2 + 1);
-	if (!result)
-		return NULL;
-	strcpy(result, s1);
-	strcat(result, s2);
-	return result;
-}
-
-static void	ft_bzero(void *s, size_t n)
-{
-	unsigned char	*ptr;
-	size_t			i;
-
-	ptr = (unsigned char *)s;
-	i = 0;
-	while (i < n)
-		ptr[i++] = 0;
-}
 
 static void	*xmalloc(size_t size)
 {
@@ -205,7 +171,7 @@ char *expander(const char *word, int *index, t_config config)
 		char status[12];
 		*index = i + 1;
 
-		return itoa(config.exit_status);
+		return ft_itoa(config.exit_status);
 	}
 	else 
 	{
