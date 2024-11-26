@@ -6,7 +6,7 @@
 /*   By: nkawaguc <nkawaguc@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/16 22:27:01 by nkawaguc          #+#    #+#             */
-/*   Updated: 2024/11/25 12:15:07 by nkawaguc         ###   ########.fr       */
+/*   Updated: 2024/11/26 15:13:35 by nkawaguc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,7 @@ int	main(int argc, char **argv, char **envp)
 	root = NULL;
 	main_loop(&config, input_data, root, &data);
 	free_config(&config);
-	return (config.exit_status);
+	return (config.last_exit_status);
 }
 
 static void	main_loop(t_config *config,
@@ -41,6 +41,7 @@ static void	main_loop(t_config *config,
 {
 	while (1)
 	{
+		config->last_exit_status = config->exit_status;
 		input_data = readline("minishell$ ");
 		add_history(input_data);
 		if (!input_data)

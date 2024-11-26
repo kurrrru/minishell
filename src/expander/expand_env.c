@@ -6,7 +6,7 @@
 /*   By: nkawaguc <nkawaguc@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/26 00:38:00 by nkawaguc          #+#    #+#             */
-/*   Updated: 2024/11/26 13:09:34 by nkawaguc         ###   ########.fr       */
+/*   Updated: 2024/11/26 19:08:29 by nkawaguc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,8 +14,10 @@
 
 static int	find_next_valid_dollar(const char *word, t_lexer_flag *flag);
 static int	find_end_of_env(const char *word);
-static char	*append_word(char *expanded, const char *word, int len, t_config *config);
-static char	*append_env_word(char *expanded, const char *word, int len, t_config *config);
+static char	*append_word(char *expanded, const char *word,
+				int len, t_config *config);
+static char	*append_env_word(char *expanded, const char *word,
+				int len, t_config *config);
 
 // wordはfreeされない。
 char	*expand_env(const char *word, t_config *config)
@@ -29,9 +31,8 @@ char	*expand_env(const char *word, t_config *config)
 	expanded = ft_strdup("");
 	if (!expanded)
 	{
-		perror("malloc");
 		config->exit_status = EXIT_FAILURE;
-		return (NULL);
+		return (perror("malloc"), NULL);
 	}
 	while (word[0])
 	{
@@ -51,7 +52,8 @@ char	*expand_env(const char *word, t_config *config)
 	return (expanded);
 }
 
-static char	*append_word(char *expanded, const char *word, int len, t_config *config)
+static char	*append_word(char *expanded, const char *word,
+				int len, t_config *config)
 {
 	char	*temp;
 	char	*new_expanded;
@@ -75,7 +77,7 @@ static char	*append_word(char *expanded, const char *word, int len, t_config *co
 
 static int	find_next_valid_dollar(const char *word, t_lexer_flag *flag)
 {
-	int i;
+	int	i;
 
 	i = 0;
 	while (word[i])
@@ -84,7 +86,9 @@ static int	find_next_valid_dollar(const char *word, t_lexer_flag *flag)
 			flag->dquote = !flag->dquote;
 		else if (word[i] == '\'' && flag->dquote == 0)
 			flag->squote = !flag->squote;
-		else if (word[i] == '$' && flag->squote == 0 && (ft_isalpha(word[i + 1]) || word[i + 1] == '_' || word[i + 1] == '?'))
+		else if (word[i] == '$' && flag->squote == 0
+			&& (ft_isalpha(word[i + 1]) || word[i + 1] == '_'
+				|| word[i + 1] == '?'))
 			return (i);
 		i++;
 	}
@@ -93,7 +97,7 @@ static int	find_next_valid_dollar(const char *word, t_lexer_flag *flag)
 
 static int	find_end_of_env(const char *word)
 {
-	int i;
+	int	i;
 
 	if (word[0] == '?')
 		return (1);
@@ -103,7 +107,8 @@ static int	find_end_of_env(const char *word)
 	return (i);
 }
 
-static char	*append_env_word(char *expanded, const char *word, int len, t_config *config)
+static char	*append_env_word(char *expanded, const char *word,
+				int len, t_config *config)
 {
 	char	*key;
 	char	*env_value;
@@ -131,27 +136,29 @@ static char	*append_env_word(char *expanded, const char *word, int len, t_config
 	return (new_expanded);
 }
 
-int main(int argc, char **argv, char **envp)
-{
-	t_config	config;
-	char		*expanded;
+// int main(int argc, char **argv, char **envp)
+// {
+// 	t_config	config;
+// 	char		*token_to_expand = "$USER$PATH$HOME$PWD$OLDPWD$?";
+// 	char		*expanded;
 
-	(void)argc;
-	(void)argv;
-	if (init_config(&config, envp) == EXIT_FAILURE)
-	{
-		perror("malloc");
-		exit(EXIT_FAILURE);
-	}
-	config.last_exit_status = 123;
-	expanded = expand_env("$USER, $PWD$SHLVL, $SDFDA'A'", &config);
-	if (!expanded)
-	{
-		fprintf(stderr, "expand_env failed\n");
-		exit(EXIT_FAILURE);
-	}
-	printf("%s\n", expanded);
-	free(expanded);
-	free_config(&config);
-	return (config.exit_status);
-}
+// 	(void)argc;
+// 	(void)argv;
+// 	if (init_config(&config, envp) == EXIT_FAILURE)
+// 	{
+// 		perror("malloc");
+// 		exit(EXIT_FAILURE);
+// 	}
+// 	config.last_exit_status = 123;
+// 	expanded = expand_env(token_to_expand, &config);
+// 	if (!expanded)
+// 	{
+// 		fprintf(stderr, "expand_env failed\n");
+// 		exit(EXIT_FAILURE);
+// 	}
+// 	del_quote(expanded);
+// 	printf("%s\n", expanded);
+// 	free(expanded);
+// 	free_config(&config);
+// 	return (config.exit_status);
+// }

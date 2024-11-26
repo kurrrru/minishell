@@ -6,7 +6,7 @@
 /*   By: nkawaguc <nkawaguc@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/26 00:25:17 by nkawaguc          #+#    #+#             */
-/*   Updated: 2024/11/26 00:35:10 by nkawaguc         ###   ########.fr       */
+/*   Updated: 2024/11/26 19:32:35 by nkawaguc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,9 @@
 
 static void	append_segment(char *word, int *j, int *i, char quote);
 
+/*
+Unclosed quote is dealt with in lexer, so we don't have to worry about it here.
+*/
 void	del_quote(char *word)
 {
 	int		i;

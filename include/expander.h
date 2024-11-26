@@ -1,39 +1,32 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   config.h                                           :+:      :+:    :+:   */
+/*   expander.h                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: nkawaguc <nkawaguc@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/11/15 13:13:01 by nkawaguc          #+#    #+#             */
-/*   Updated: 2024/11/26 02:55:33 by nkawaguc         ###   ########.fr       */
+/*   Created: 2024/11/26 02:24:21 by nkawaguc          #+#    #+#             */
+/*   Updated: 2024/11/26 19:15:45 by nkawaguc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef CONFIG_H
-# define CONFIG_H
+#ifndef EXPANDER_H
+# define EXPANDER_H
 
-# include "include.h"
+# include "config.h"
+# include "lexer.h"
+# include "util.h"
 # include "macro.h"
+# include "include.h"
 
-typedef struct s_env
-{
-	char	*key;
-	char	*value;
-}	t_env;
+char	*expand_env(const char *word, t_config *config);
 
-typedef struct s_config
-{
-	int		exit_status;
-	int		last_exit_status;
-	t_env	*envp;
-	int		envp_num;
-	int		envp_capacity;
-	int		is_child;
-}	t_config;
+char	*find_env(const char *key, t_config *config);
 
-int		init_config(t_config *config, char **envp);
-void	free_config(t_config *config);
-char	**make_envp(t_config *config);
+void	del_quote(char *word);
+
+int		is_match(const char *text, const char *pattern);
+
+char	**expand_wildcard(const char *pattern, t_config *config);
 
 #endif
