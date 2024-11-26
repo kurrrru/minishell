@@ -6,7 +6,7 @@
 /*   By: nkawaguc <nkawaguc@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/16 22:16:11 by nkawaguc          #+#    #+#             */
-/*   Updated: 2024/11/24 17:42:40 by nkawaguc         ###   ########.fr       */
+/*   Updated: 2024/11/26 20:35:25 by nkawaguc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,8 @@ int	run_tree(t_node *root, int in_fd, int out_fd, t_config *config)
 		return (EXIT_SUCCESS);
 	if (root->type == NODE_COMMAND)
 	{
+		if (expand_command_node(root, config) != EXIT_SUCCESS)
+			return (EXIT_FAILURE);
 		if (is_builtin_fxn(root))
 			return (exec_command(root, in_fd, out_fd, config));
 		pid = fork();
@@ -31,7 +33,7 @@ int	run_tree(t_node *root, int in_fd, int out_fd, t_config *config)
 		if (pid == 0)
 		{
 			config->is_child = 1;
-			run_node(root, in_fd, out_fd, config);
+			exec_command(root, in_fd, out_fd, config);
 		}
 		else
 		{

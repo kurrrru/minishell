@@ -6,7 +6,7 @@
 /*   By: nkawaguc <nkawaguc@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/05 23:03:58 by nkawaguc          #+#    #+#             */
-/*   Updated: 2024/11/24 12:43:35 by nkawaguc         ###   ########.fr       */
+/*   Updated: 2024/11/26 20:13:15 by nkawaguc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,6 +24,9 @@ int		ft_strcmp(const char *s1, const char *s2);
 
 // free_2d.c
 void	free_2d(char **arr);
+
+// free_3d.c
+void	free_3d(char ***arr);
 
 void	*xmalloc(size_t size);
 void	*xrealloc(void *ptr, size_t old_size, size_t new_size);

@@ -6,7 +6,7 @@
 /*   By: nkawaguc <nkawaguc@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/15 14:18:14 by nkawaguc          #+#    #+#             */
-/*   Updated: 2024/11/18 19:05:52 by nkawaguc         ###   ########.fr       */
+/*   Updated: 2024/11/26 21:15:28 by nkawaguc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,7 @@
 # include "macro.h"
 # include "include.h"
 # include "util.h"
+# include "expander.h"
 
 typedef enum e_node_type
 {

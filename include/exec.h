@@ -6,7 +6,7 @@
 /*   By: nkawaguc <nkawaguc@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/16 22:14:35 by nkawaguc          #+#    #+#             */
-/*   Updated: 2024/11/24 18:26:33 by nkawaguc         ###   ########.fr       */
+/*   Updated: 2024/11/26 20:34:43 by nkawaguc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,7 @@
 # include "util.h"
 # include "macro.h"
 # include "include.h"
+# include "expander.h"
 
 typedef struct s_exec
 {

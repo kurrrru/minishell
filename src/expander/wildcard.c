@@ -6,7 +6,7 @@
 /*   By: nkawaguc <nkawaguc@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/26 19:01:01 by nkawaguc          #+#    #+#             */
-/*   Updated: 2024/11/26 19:23:16 by nkawaguc         ###   ########.fr       */
+/*   Updated: 2024/11/26 21:13:38 by nkawaguc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,12 +17,13 @@ static void	sort_strings(char **strings);
 
 char	**expand_wildcard(const char *pattern, t_config *config)
 {
-	const char	**files = get_files_in_directory();
+	char		**files;
 	char		**expanded;
 	size_t		count;
 	size_t		capacity;
 	size_t		i;
 
+	files = get_files_in_directory();
 	if (!files)
 	{
 		perror("get_files_in_directory");
@@ -88,12 +89,13 @@ char	**expand_wildcard(const char *pattern, t_config *config)
 
 static char	**get_files_in_directory(void)
 {
-	const DIR		*dir = opendir(".");
+	DIR				*dir;
 	struct dirent	*entry;
 	char			**files;
 	size_t			count;
 	size_t			capacity;
 
+	dir = opendir(".");
 	if (!dir)
 		return (NULL);
 	capacity = 2;

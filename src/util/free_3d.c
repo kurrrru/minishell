@@ -1,23 +1,28 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   expand_len.c                                       :+:      :+:    :+:   */
+/*   free_3d.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: nkawaguc <nkawaguc@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/11/26 19:36:09 by nkawaguc          #+#    #+#             */
-/*   Updated: 2024/11/26 20:38:24 by nkawaguc         ###   ########.fr       */
+/*   Created: 2024/11/26 20:12:25 by nkawaguc          #+#    #+#             */
+/*   Updated: 2024/11/26 20:13:06 by nkawaguc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../include/expander.h"
+#include "../../include/util.h"
 
-int	expand_len(char **expanded)
+void	free_3d(char ***arr)
 {
 	int	i;
 
+	if (!arr)
+		return ;
 	i = 0;
-	while (expanded[i])
+	while (arr[i])
+	{
+		free_2d(arr[i]);
 		i++;
-	return (i);
+	}
+	free(arr);
 }
