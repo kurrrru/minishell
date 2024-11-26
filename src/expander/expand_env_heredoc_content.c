@@ -6,7 +6,7 @@
 /*   By: nkawaguc <nkawaguc@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/26 00:38:00 by nkawaguc          #+#    #+#             */
-/*   Updated: 2024/11/26 21:22:42 by nkawaguc         ###   ########.fr       */
+/*   Updated: 2024/11/26 21:51:31 by nkawaguc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,6 +78,7 @@ static int	find_next_valid_dollar(const char *word, t_lexer_flag *flag)
 {
 	int	i;
 
+	(void)flag;
 	i = 0;
 	while (word[i])
 	{

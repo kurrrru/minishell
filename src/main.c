@@ -6,7 +6,7 @@
 /*   By: nkawaguc <nkawaguc@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/16 22:27:01 by nkawaguc          #+#    #+#             */
-/*   Updated: 2024/11/26 21:41:48 by nkawaguc         ###   ########.fr       */
+/*   Updated: 2024/11/26 21:44:52 by nkawaguc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,6 +51,7 @@ static void	main_loop(t_config *config,
 		g_signal = 0;
 		rl_event_hook = event;
 		set_idle_handler();
+		config->last_exit_status = config->exit_status;
 		input_data = readline("minishell$ ");
 		if(g_signal != 0)
 		{

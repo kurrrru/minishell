@@ -6,7 +6,7 @@
 /*   By: nkawaguc <nkawaguc@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/16 22:16:11 by nkawaguc          #+#    #+#             */
-/*   Updated: 2024/11/26 21:41:26 by nkawaguc         ###   ########.fr       */
+/*   Updated: 2024/11/26 21:45:24 by nkawaguc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,6 +21,8 @@ int	run_tree(t_node *root, int in_fd, int out_fd, t_config *config)
 	if (root->type == NODE_COMMAND)
 	{
 		set_exec_handler();
+		if (expand_command_node(root, config) != EXIT_SUCCESS)
+			return (EXIT_FAILURE);
 		if (is_builtin_fxn(root))
 			return (exec_command(root, in_fd, out_fd, config));
 		pid = fork();

@@ -6,7 +6,7 @@
 /*   By: nkawaguc <nkawaguc@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/26 02:24:21 by nkawaguc          #+#    #+#             */
-/*   Updated: 2024/11/26 21:17:18 by nkawaguc         ###   ########.fr       */
+/*   Updated: 2024/11/26 21:51:04 by nkawaguc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,9 @@
 # include "util.h"
 # include "macro.h"
 # include "include.h"
+
+struct s_node;
+typedef struct s_node	t_node;
 
 char	**expander(const char *word, t_config *config);
 
