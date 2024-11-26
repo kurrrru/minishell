@@ -6,7 +6,7 @@
 /*   By: nkawaguc <nkawaguc@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/16 18:51:40 by nkawaguc          #+#    #+#             */
-/*   Updated: 2024/11/16 21:20:32 by nkawaguc         ###   ########.fr       */
+/*   Updated: 2024/11/26 23:22:36 by nkawaguc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,7 +60,7 @@ static void	parse_malloc_error(t_node *root, t_config *config)
 
 static t_node	*add_argv(t_token *token, t_config *config, t_node **root)
 {
-	if ((*root)->arg_num >= (*root)->arg_capacity)
+	if ((*root)->arg_num >= (*root)->arg_capacity - 1)
 	{
 		(*root)->arg_capacity *= 2;
 		(*root)->argv = ft_realloc((*root)->argv,
