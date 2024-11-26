@@ -8,8 +8,7 @@ void	idle_handler(int signum)
 	g_signal = SIGINT;
 	ft_putchar_fd('\n', STDOUT_FILENO);
 	rl_replace_line("", 0);
-	rl_on_new_line();
-	rl_redisplay();
+	rl_done = 1;
 }
 
 void	heredoc_handler(int signum)
@@ -27,7 +26,7 @@ void	set_heredoc_child_handler(void)
 	sigemptyset(&sig.sa_mask);
 	sig.sa_flags = 0;
 	sigaction(SIGQUIT, &sig, NULL);
-	sig.sa_handler = SIG_DFL;
+	sig.sa_handler = SIG_DFL; 
 	sigaction(SIGINT, &sig, NULL);
 }
 
@@ -35,11 +34,10 @@ void	set_heredoc_handler(void)
 {
 	struct sigaction	sig;
 
-	sig.sa_handler = heredoc_handler;
+	sig.sa_handler = SIG_IGN;
 	sigemptyset(&sig.sa_mask);
 	sig.sa_flags = 0;
 	sigaction(SIGINT, &sig, NULL);
-	sig.sa_handler = SIG_IGN;
 	sigaction(SIGQUIT, &sig, NULL);
 }
 

@@ -12,9 +12,9 @@
 
 #include "../../include/parser.h"
 
-static int heredoc_read(t_redirect *redirect, int heredoc_fd[2]);
+static int heredoc_read(t_redirect *redirect, int heredoc_fd[2], t_config *config);
 
-int	parse_heredoc(t_redirect *redirect)
+int	parse_heredoc(t_redirect *redirect, t_config *config)
 {
 	int		heredoc_fd[2];
 	// char	*file;
@@ -27,17 +27,16 @@ int	parse_heredoc(t_redirect *redirect)
 	if (pipe(heredoc_fd) == -1)
 		return (perror("pipe"), EXIT_FAILURE);
 	// set heredoc sighandler ?
-	if (heredoc_read(redirect, heredoc_fd))
+	if (heredoc_read(redirect, heredoc_fd, config))
 		return (close(heredoc_fd[0]), close(heredoc_fd[1]), EXIT_FAILURE);
 	close(heredoc_fd[1]);
 	redirect->heredoc_fd = heredoc_fd[0];
 	return (EXIT_SUCCESS);
 }
 
-static int heredoc_read(t_redirect *redirect, int heredoc_fd[2])
+static int heredoc_read(t_redirect *redirect, int heredoc_fd[2], t_config *config)
 {
     pid_t pid;
-	int status;
 
     set_heredoc_handler();
     pid = fork();
@@ -64,11 +63,8 @@ static int heredoc_read(t_redirect *redirect, int heredoc_fd[2])
     else
     {
         close(heredoc_fd[1]);
-        waitpid(pid, &status, 0);
-        if (g_signal == SIGINT)
-			return EXIT_FAILURE;
-        if (WEXITSTATUS(status) != EXIT_SUCCESS)
-            return EXIT_FAILURE;
+        waitpid(pid, &config->exit_status, 0);
+        config->exit_status = extract_status(config->exit_status);
     }
     return EXIT_SUCCESS;
 }

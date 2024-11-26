@@ -6,9 +6,6 @@
 # include "macro.h"
 # include "util.h"
 
-
-volatile sig_atomic_t g_signal;
-
 void	idle_handler(int signum);
 void	set_idle_handler(void);
 void	exec_handler(int signum);
@@ -16,5 +13,6 @@ void	set_exec_child_handler(void);
 void	set_exec_handler(void);
 void	set_heredoc_handler(void);
 void set_heredoc_child_handler(void);
+void	heredoc_child_handler(int signum);
 
 #endif
