@@ -6,7 +6,7 @@
 /*   By: nkawaguc <nkawaguc@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/23 21:26:25 by nkawaguc          #+#    #+#             */
-/*   Updated: 2024/11/24 19:58:24 by nkawaguc         ###   ########.fr       */
+/*   Updated: 2024/11/28 22:35:50 by nkawaguc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,6 +23,7 @@ void	bi_cd(t_exec exec, t_config *config)
 	char	old_cwd[PATH_MAX];
 	char	*target_path;
 
+	config->exit_status = EXIT_SUCCESS;
 	if (!exec.argv[1])
 	{
 		target_path = get_env_value(config, "HOME");
@@ -46,28 +47,27 @@ void	bi_cd(t_exec exec, t_config *config)
 	else
 		target_path = exec.argv[1];
 	update_pwd(old_cwd, target_path, cwd, config);
-	config->exit_status = EXIT_SUCCESS;
 }
 
 static void	update_pwd(char old_cwd[PATH_MAX], char *target_path,
 		char cwd[PATH_MAX], t_config *config)
 {
 	getcwd(old_cwd, PATH_MAX);
-	if (chdir(target_path) != 0)
+	if (chdir(target_path) == -1)
 	{
 		perror(target_path);
-		config->exit_status = EXIT_INVALID_INPUT;
+		config->exit_status = EXIT_FAILURE;
 		return ;
 	}
 	if (!old_cwd)
 	{
 		ft_putendl_fd("cd: getcwd", STDERR_FILENO);
-		config->exit_status = EXIT_INVALID_INPUT;
+		config->exit_status = EXIT_FAILURE;
 	}
 	if (!getcwd(cwd, PATH_MAX))
 	{
 		ft_putendl_fd("cd: getcwd", STDERR_FILENO);
-		config->exit_status = EXIT_INVALID_INPUT;
+		config->exit_status = EXIT_FAILURE;
 	}
 	update_env(config, "OLDPWD", old_cwd);
 	update_env(config, "PWD", cwd);

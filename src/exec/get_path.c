@@ -6,18 +6,18 @@
 /*   By: nkawaguc <nkawaguc@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/17 02:05:02 by nkawaguc          #+#    #+#             */
-/*   Updated: 2024/11/17 22:33:24 by nkawaguc         ###   ########.fr       */
+/*   Updated: 2024/11/28 22:29:25 by nkawaguc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/exec.h"
 
-static char	**get_path_list(void);
+static char	**get_path_list(t_config *config);
 static char	*join_path(char *dir, char *file);
 static char	*abs_or_rel_path(char *command);
 static void	command_not_found(char *command);
 
-char	*get_path(char *command)
+char	*get_path(char *command, t_config *config)
 {
 	char	*path;
 	char	**path_list;
@@ -29,7 +29,7 @@ char	*get_path(char *command)
 		return (abs_or_rel_path(command));
 	if (ft_strcmp(command, ".") == 0 || ft_strcmp(command, "..") == 0)
 		command_not_found(command);
-	path_list = get_path_list();
+	path_list = get_path_list(config);
 	i = -1;
 	while (path_list[++i])
 	{
@@ -46,12 +46,12 @@ char	*get_path(char *command)
 	return (free_2d(path_list), path);
 }
 
-static char	**get_path_list(void)
+static char	**get_path_list(t_config *config)
 {
 	char	*path_env;
 	char	**path_list;
 
-	path_env = getenv("PATH");
+	path_env = find_env("PATH", config);
 	if (path_env)
 		path_env = ft_strdup(path_env);
 	else
