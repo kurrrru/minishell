@@ -6,7 +6,7 @@
 /*   By: nkawaguc <nkawaguc@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/26 19:01:01 by nkawaguc          #+#    #+#             */
-/*   Updated: 2024/11/26 21:13:38 by nkawaguc         ###   ########.fr       */
+/*   Updated: 2024/11/28 23:31:56 by nkawaguc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,7 @@ char	**expand_wildcard(const char *pattern, t_config *config)
 	}
 	count = 0;
 	capacity = 2;
-	expanded = malloc(sizeof(char *) * capacity);
+	expanded = ft_calloc(capacity, sizeof(char *));
 	if (!expanded)
 	{
 		perror("malloc");
@@ -48,12 +48,11 @@ char	**expand_wildcard(const char *pattern, t_config *config)
 			if (count + 1 >= capacity)
 			{
 				capacity *= 2;
-				expanded = ft_realloc(expanded, sizeof(char *)
+				expanded = ft_realloc_char(expanded, sizeof(char *)
 						* (capacity / 2), sizeof(char *) * capacity);
 				if (!expanded)
 				{
 					perror("ft_realloc");
-					free_2d(expanded);
 					config->exit_status = EXIT_FAILURE;
 					return (NULL);
 				}
@@ -99,7 +98,7 @@ static char	**get_files_in_directory(void)
 	if (!dir)
 		return (NULL);
 	capacity = 2;
-	files = malloc(sizeof(char *) * capacity);
+	files = ft_calloc(capacity, sizeof(char *));
 	if (!files)
 		return (NULL);
 	files[0] = NULL;
@@ -109,9 +108,18 @@ static char	**get_files_in_directory(void)
 		entry = readdir(dir);
 		if (!entry)
 			break ;
-		capacity *= 2;
-		files = ft_realloc(files, sizeof(char *) * (capacity / 2),
-				sizeof(char *) * capacity);
+		if (count + 1 >= capacity)
+		{
+			capacity *= 2;
+			files = ft_realloc_char(files, sizeof(char *) * (capacity / 2),
+					sizeof(char *) * capacity);
+			if (!files)
+			{
+				perror("ft_realloc");
+				closedir(dir);
+				return (NULL);
+			}
+		}
 		files[++count] = ft_strdup(entry->d_name);
 		if (!files[count])
 		{

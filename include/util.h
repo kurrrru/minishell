@@ -6,7 +6,7 @@
 /*   By: nkawaguc <nkawaguc@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/05 23:03:58 by nkawaguc          #+#    #+#             */
-/*   Updated: 2024/11/26 20:13:15 by nkawaguc         ###   ########.fr       */
+/*   Updated: 2024/11/28 23:57:40 by nkawaguc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,9 @@
 // ft_realloc.c
 void	*ft_realloc(void *ptr, size_t old_size, size_t new_size);
 
+// ft_realloc_char.c
+char	**ft_realloc_char(char **ptr, size_t old_size, size_t new_size);
+
 // ft_strcmp.c
 int		ft_strcmp(const char *s1, const char *s2);
 
@@ -27,9 +30,6 @@ void	free_2d(char **arr);
 
 // free_3d.c
 void	free_3d(char ***arr);
-
-void	*xmalloc(size_t size);
-void	*xrealloc(void *ptr, size_t old_size, size_t new_size);
 
 int		extract_status(int status);
 

@@ -6,7 +6,7 @@
 /*   By: nkawaguc <nkawaguc@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/17 02:05:02 by nkawaguc          #+#    #+#             */
-/*   Updated: 2024/11/28 22:29:25 by nkawaguc         ###   ########.fr       */
+/*   Updated: 2024/11/29 00:14:39 by nkawaguc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,9 +52,7 @@ static char	**get_path_list(t_config *config)
 	char	**path_list;
 
 	path_env = find_env("PATH", config);
-	if (path_env)
-		path_env = ft_strdup(path_env);
-	else
+	if (!path_env)
 		path_env = getcwd(NULL, 0);
 	path_list = ft_split(path_env, ':');
 	if (!path_list)
