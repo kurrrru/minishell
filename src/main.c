@@ -6,7 +6,7 @@
 /*   By: nkawaguc <nkawaguc@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/16 22:27:01 by nkawaguc          #+#    #+#             */
-/*   Updated: 2024/11/28 16:37:26 by nkawaguc         ###   ########.fr       */
+/*   Updated: 2024/11/29 00:58:30 by nkawaguc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,9 +67,12 @@ static void	main_loop(t_config *config,
 		if (ft_strlen(input_data) > 0)
 			add_history(input_data);
 		config->exit_status = lexer(input_data, data, config);
-		if (ft_strlen(input_data) == 0 || config->exit_status != EXIT_SUCCESS)
+		if (data->token_num == 0 || config->exit_status != EXIT_SUCCESS)
 		{
+			if (data->token_num == 0)
+				config->exit_status = config->last_exit_status;
 			free(input_data);
+			free_data(data);
 			continue ;
 		}
 		free(input_data);
