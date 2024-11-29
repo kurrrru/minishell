@@ -75,6 +75,8 @@ delimited by end-of-file (wanted `", STDERR_FILENO);
 	{
 		waitpid(pid, &config->exit_status, 0);
 		config->exit_status = extract_status(config->exit_status);
+		if(config->exit_status == 130)
+			ft_putchar_fd('\n', STDOUT_FILENO);
 	}
 	return (EXIT_SUCCESS);
 }

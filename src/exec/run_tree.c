@@ -12,6 +12,8 @@
 
 #include "../../include/exec.h"
 
+extern sig_atomic_t g_signal;
+
 int	run_tree(t_node *root, int in_fd, int out_fd, t_config *config)
 {
 	int	pid;
@@ -41,6 +43,10 @@ int	run_tree(t_node *root, int in_fd, int out_fd, t_config *config)
 		{
 			waitpid(pid, &config->exit_status, 0);
 			config->exit_status = extract_status(config->exit_status);
+			if(g_signal == SIGINT)
+				config->exit_status = 130;
+			else if(g_signal == SIGQUIT)
+				config->exit_status = 131;
 			return (config->exit_status);
 		}
 	}

@@ -6,7 +6,6 @@ void	idle_handler(int signum)
 {
 	(void) signum;
 	g_signal = SIGINT;
-	ft_putchar_fd('\n', STDOUT_FILENO);
 	rl_replace_line("", 0);
 	rl_done = 1;
 }
@@ -57,13 +56,16 @@ void	exec_handler(int signum)
 {
 	if (signum == SIGINT)
 	{
+		g_signal = SIGINT;
 		ft_putchar_fd('\n', STDOUT_FILENO);
 		rl_replace_line("", 0);
 		rl_on_new_line();
+
 	}
 	if (signum == SIGQUIT)
 	{
-		ft_putstr_fd("Quit: 3\n", STDOUT_FILENO);
+		g_signal = SIGQUIT;
+		ft_putstr_fd("Quit (core dumped)\n", STDOUT_FILENO);
 		rl_replace_line("", 0);
 		rl_on_new_line();
 	}
