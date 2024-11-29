@@ -6,7 +6,7 @@
 /*   By: nkawaguc <nkawaguc@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/17 14:29:54 by nkawaguc          #+#    #+#             */
-/*   Updated: 2024/11/17 23:21:31 by nkawaguc         ###   ########.fr       */
+/*   Updated: 2024/11/29 11:19:10 by nkawaguc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,10 @@ static int	exec_logical_and(t_node *node, int in_fd,
 		return (config->exit_status);
 	config->exit_status = run_tree(node->left, in_fd, out_fd, config);
 	if (config->exit_status == EXIT_SUCCESS)
+	{
+		config->last_exit_status = config->exit_status;
 		config->exit_status = run_tree(node->right, in_fd, out_fd, config);
+	}
 	return (config->exit_status);
 }
 
@@ -46,7 +49,10 @@ static int	exec_logical_or(t_node *node, int in_fd,
 	if (config->exit_status != EXIT_SUCCESS)
 		return (config->exit_status);
 	config->exit_status = run_tree(node->left, in_fd, out_fd, config);
-	if (config->exit_status != 0)
+	if (config->exit_status != EXIT_SUCCESS)
+	{
+		config->last_exit_status = config->exit_status;
 		config->exit_status = run_tree(node->right, in_fd, out_fd, config);
+	}
 	return (config->exit_status);
 }
