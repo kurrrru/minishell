@@ -33,6 +33,8 @@ int	lexer_split(const char *input_line, t_data *data)
 			ft_putendl_fd("Syntax error: unmatched `''", STDERR_FILENO);
 		return (EXIT_INVALID_INPUT);
 	}
+	if(data->token_num == 0)
+		return (EXIT_SUCCESS);
 	data->token_arr = ft_calloc(data->token_num + 1, sizeof(t_token));
 	if (!data->token_arr)
 	{

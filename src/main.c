@@ -72,7 +72,6 @@ static void	main_loop(t_config *config,
 			if (data->token_num == 0)
 				config->exit_status = config->last_exit_status;
 			free(input_data);
-			free_data(data);
 			continue ;
 		}
 		free(input_data);

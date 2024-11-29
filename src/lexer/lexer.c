@@ -14,6 +14,7 @@
 
 int	lexer(const char *input_line, t_data *data, t_config *config)
 {
+	data->token_num = 0;
 	if (ft_strlen(input_line) == 0)
 		return (config->exit_status);
 	config->exit_status = lexer_split(input_line, data);
