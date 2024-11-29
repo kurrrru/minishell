@@ -6,7 +6,7 @@
 /*   By: nkawaguc <nkawaguc@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/26 19:01:01 by nkawaguc          #+#    #+#             */
-/*   Updated: 2024/11/28 23:31:56 by nkawaguc         ###   ########.fr       */
+/*   Updated: 2024/11/29 11:50:40 by nkawaguc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -91,8 +91,8 @@ static char	**get_files_in_directory(void)
 	DIR				*dir;
 	struct dirent	*entry;
 	char			**files;
-	size_t			count;
-	size_t			capacity;
+	int				count;
+	int				capacity;
 
 	dir = opendir(".");
 	if (!dir)
@@ -108,7 +108,7 @@ static char	**get_files_in_directory(void)
 		entry = readdir(dir);
 		if (!entry)
 			break ;
-		if (count + 1 >= capacity)
+		if (count + 2 >= capacity)
 		{
 			capacity *= 2;
 			files = ft_realloc_char(files, sizeof(char *) * (capacity / 2),
@@ -129,7 +129,6 @@ static char	**get_files_in_directory(void)
 			return (NULL);
 		}
 	}
-	files[++count] = NULL;
 	closedir(dir);
 	return (files);
 }
