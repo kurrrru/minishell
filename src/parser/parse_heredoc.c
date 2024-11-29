@@ -6,7 +6,7 @@
 /*   By: nkawaguc <nkawaguc@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/26 21:53:27 by nkawaguc          #+#    #+#             */
-/*   Updated: 2024/11/27 01:11:37 by nkawaguc         ###   ########.fr       */
+/*   Updated: 2024/11/29 23:31:02 by nkawaguc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,8 +20,8 @@ int	parse_heredoc(t_redirect *redirect, t_config *config)
 
 	if (pipe(heredoc_fd) == -1)
 		return (perror("pipe"), EXIT_FAILURE);
-	if (heredoc_read(redirect, heredoc_fd, config))
-		return (close(heredoc_fd[0]), close(heredoc_fd[1]), EXIT_FAILURE);
+	if (heredoc_read(redirect, heredoc_fd, config) != EXIT_SUCCESS)
+		return (close(heredoc_fd[0]), close(heredoc_fd[1]), config->exit_status);
 	close(heredoc_fd[1]);
 	redirect->heredoc_fd = heredoc_fd[0];
 	return (EXIT_SUCCESS);
@@ -76,7 +76,10 @@ delimited by end-of-file (wanted `", STDERR_FILENO);
 		waitpid(pid, &config->exit_status, 0);
 		config->exit_status = extract_status(config->exit_status);
 		if(config->exit_status == 130)
+		{
 			ft_putchar_fd('\n', STDOUT_FILENO);
+			return (config->exit_status);
+		}
 	}
 	return (EXIT_SUCCESS);
 }
