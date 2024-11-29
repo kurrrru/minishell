@@ -54,6 +54,7 @@ static int	exec_pipe_left_con_right_cmd(t_node *node, t_pipe_helper ph,
 		run_node(node->left, ph.in_fd, ph.pipe_fd[1], config);
 		close(ph.pipe_fd[1]);
 		waitpid(ph.pid[1], &config->exit_status, 0);
+		check_core_dump(config->exit_status);
 		config->exit_status = extract_status(config->exit_status);
 	}
 	return (config->exit_status);

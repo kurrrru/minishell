@@ -14,5 +14,6 @@ void	set_exec_handler(void);
 void	set_heredoc_handler(void);
 void set_heredoc_child_handler(void);
 void	heredoc_child_handler(int signum);
+void check_core_dump(int status);
 
 #endif

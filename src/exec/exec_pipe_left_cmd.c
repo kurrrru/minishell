@@ -66,6 +66,7 @@ static int	exec_pipe_left_cmd_right_cmd(t_node *node, t_pipe_helper ph,
 		close(ph.pipe_fd[0]);
 		waitpid(ph.pid[0], NULL, 0);
 		waitpid(ph.pid[1], &config->exit_status, 0);
+		check_core_dump(config->exit_status);
 		config->exit_status = extract_status(config->exit_status);
 	}
 	return (config->exit_status);
@@ -77,6 +78,7 @@ static int	exec_pipe_left_cmd_right_con(t_node *node, t_pipe_helper ph,
 	config->exit_status
 		= run_node(node->right, ph.pipe_fd[0], ph.out_fd, config);
 	waitpid(ph.pid[0], NULL, 0);
+	check_core_dump(config->exit_status);
 	close(ph.pipe_fd[0]);
 	return (config->exit_status);
 }

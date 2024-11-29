@@ -60,9 +60,12 @@ void	exec_handler(int signum)
 		ft_putchar_fd('\n', STDOUT_FILENO);
 		rl_replace_line("", 0);
 		rl_on_new_line();
-
 	}
-	if (signum == SIGQUIT)
+}
+
+void check_core_dump(int status)
+{
+	if (WCOREDUMP(status))
 	{
 		g_signal = SIGQUIT;
 		ft_putstr_fd("Quit (core dumped)\n", STDOUT_FILENO);
@@ -70,7 +73,7 @@ void	exec_handler(int signum)
 		rl_on_new_line();
 	}
 }
-
+			
 void	set_exec_child_handler(void)
 {
 	struct sigaction	sig;
@@ -82,13 +85,14 @@ void	set_exec_child_handler(void)
 	sigaction(SIGQUIT, &sig, NULL);
 }
 
-void	set_exec_handler(void)
+void	set_exec_handler()
 {
 	struct sigaction	sig;
 
 	sigemptyset(&sig.sa_mask);
 	sig.sa_flags = 0;
 	sig.sa_handler = exec_handler;
-	sigaction(SIGQUIT, &sig, NULL);
 	sigaction(SIGINT, &sig, NULL);
+	sig.sa_handler = SIG_IGN;
+	sigaction(SIGQUIT, &sig, NULL);
 }

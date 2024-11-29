@@ -22,11 +22,11 @@ int	run_tree(t_node *root, int in_fd, int out_fd, t_config *config)
 		return (EXIT_SUCCESS);
 	if (root->type == NODE_COMMAND)
 	{
-		set_exec_handler();
 		if (expand_command_node(root, config) != EXIT_SUCCESS)
 			return (EXIT_FAILURE);
 		if (is_builtin_fxn(root))
 			return (exec_command(root, in_fd, out_fd, config));
+		set_exec_handler();
 		pid = fork();
 		if (pid == -1)
 		{
@@ -42,6 +42,7 @@ int	run_tree(t_node *root, int in_fd, int out_fd, t_config *config)
 		else
 		{
 			waitpid(pid, &config->exit_status, 0);
+			check_core_dump(config->exit_status);
 			config->exit_status = extract_status(config->exit_status);
 			if(g_signal == SIGINT)
 				config->exit_status = 130;
