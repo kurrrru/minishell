@@ -6,7 +6,7 @@
 /*   By: nkawaguc <nkawaguc@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/23 21:26:25 by nkawaguc          #+#    #+#             */
-/*   Updated: 2024/11/24 19:58:24 by nkawaguc         ###   ########.fr       */
+/*   Updated: 2024/11/28 23:59:59 by nkawaguc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,6 +23,7 @@ void	bi_cd(t_exec exec, t_config *config)
 	char	old_cwd[PATH_MAX];
 	char	*target_path;
 
+	config->exit_status = EXIT_SUCCESS;
 	if (!exec.argv[1])
 	{
 		target_path = get_env_value(config, "HOME");
@@ -46,28 +47,27 @@ void	bi_cd(t_exec exec, t_config *config)
 	else
 		target_path = exec.argv[1];
 	update_pwd(old_cwd, target_path, cwd, config);
-	config->exit_status = EXIT_SUCCESS;
 }
 
 static void	update_pwd(char old_cwd[PATH_MAX], char *target_path,
 		char cwd[PATH_MAX], t_config *config)
 {
 	getcwd(old_cwd, PATH_MAX);
-	if (chdir(target_path) != 0)
+	if (chdir(target_path) == -1)
 	{
 		perror(target_path);
-		config->exit_status = EXIT_INVALID_INPUT;
+		config->exit_status = EXIT_FAILURE;
 		return ;
 	}
 	if (!old_cwd)
 	{
 		ft_putendl_fd("cd: getcwd", STDERR_FILENO);
-		config->exit_status = EXIT_INVALID_INPUT;
+		config->exit_status = EXIT_FAILURE;
 	}
 	if (!getcwd(cwd, PATH_MAX))
 	{
 		ft_putendl_fd("cd: getcwd", STDERR_FILENO);
-		config->exit_status = EXIT_INVALID_INPUT;
+		config->exit_status = EXIT_FAILURE;
 	}
 	update_env(config, "OLDPWD", old_cwd);
 	update_env(config, "PWD", cwd);
@@ -76,8 +76,6 @@ static void	update_pwd(char old_cwd[PATH_MAX], char *target_path,
 static void	update_env(t_config *config, const char *key, const char *value)
 {
 	int		i;
-	size_t	old_size;
-	size_t	new_size;
 
 	i = -1;
 	while (++i < config->envp_num)
@@ -86,18 +84,38 @@ static void	update_env(t_config *config, const char *key, const char *value)
 		{
 			free(config->envp[i].value);
 			config->envp[i].value = ft_strdup(value);
+			if (!config->envp[i].value)
+			{
+				perror("malloc");
+				config->exit_status = EXIT_FAILURE;
+				return ;
+			}
 			return ;
 		}
 	}
 	if (config->envp_num >= config->envp_capacity)
 	{
-		old_size = config->envp_capacity * sizeof(t_env);
 		config->envp_capacity *= 2;
-		new_size = config->envp_capacity * sizeof(t_env);
-		config->envp = ft_realloc(config->envp, old_size, new_size);
+		config->envp = ft_realloc_env(config->envp,
+				sizeof(t_env) * (config->envp_capacity / 2),
+				sizeof(t_env) * config->envp_capacity);
+		if (!config->envp)
+		{
+			perror("malloc");
+			config->exit_status = EXIT_FAILURE;
+			return ;
+		}
 	}
 	config->envp[config->envp_num].key = ft_strdup(key);
 	config->envp[config->envp_num].value = ft_strdup(value);
+	if (!config->envp[config->envp_num].key || !config->envp[config->envp_num].value)
+	{
+		perror("malloc");
+		config->exit_status = EXIT_FAILURE;
+		free(config->envp[config->envp_num].key);
+		free(config->envp[config->envp_num].value);
+		return ;
+	}
 	config->envp_num++;
 }
 

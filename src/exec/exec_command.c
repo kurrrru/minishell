@@ -6,7 +6,7 @@
 /*   By: nkawaguc <nkawaguc@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/18 00:29:48 by nkawaguc          #+#    #+#             */
-/*   Updated: 2024/11/24 18:39:09 by nkawaguc         ###   ########.fr       */
+/*   Updated: 2024/11/28 22:28:34 by nkawaguc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 static void	set_fd(t_node *node, t_exec *exec);
 static void	construct_exec(t_exec *exec, t_node *node, t_config *config);
-static void	exec_errors(t_exec *exec);
+static void	exec_errors(t_exec *exec, t_node *node);
 
 int	exec_command(t_node *node, int in_fd, int out_fd, t_config *config)
 {
@@ -27,25 +27,20 @@ int	exec_command(t_node *node, int in_fd, int out_fd, t_config *config)
 	{
 		construct_exec(&exec, node, config);
 		execve(exec.command, exec.argv, exec.envp);
-		exec_errors(&exec);
+		exec_errors(&exec, node);
 		return (EXIT_FAILURE);
 	}
 	else
 	{
-		construct_bi_exec(&exec, node, config);
-		if(config->exit_status != EXIT_SUCCESS)
-			return (config->exit_status);
-		exec_bi_command(exec, config);
-		free_exec(&exec);
-		return (config->exit_status);
+		return (exec_bi(node, &exec, config));
 	}
 }
 
-static void	exec_errors(t_exec *exec)
+static void	exec_errors(t_exec *exec, t_node *node)
 {
 	if (errno == EACCES)
 	{
-		ft_putstr_fd(exec->command, STDERR_FILENO);
+		ft_putstr_fd(node->command, STDERR_FILENO);
 		if (is_directory(exec->command))
 			ft_putendl_fd(": Is a directory", STDERR_FILENO);
 		else
@@ -54,11 +49,11 @@ static void	exec_errors(t_exec *exec)
 	}
 	else if (errno == ENOENT)
 	{
-		ft_putstr_fd(exec->command, STDERR_FILENO);
+		ft_putstr_fd(node->command, STDERR_FILENO);
 		ft_putendl_fd(": bad interpreter", STDERR_FILENO);
 		exit(126);
 	}
-	perror(exec->command);
+	perror(node->command);
 	exit(126);
 }
 
@@ -69,13 +64,11 @@ static void	construct_exec(t_exec *exec, t_node *node, t_config *config)
 	set_fd(node, exec);
 	if (!node->command)
 		exit(EXIT_SUCCESS);
-	set_builtin_path(exec, node);
-	if (!exec->command)
-		exec->command = get_path(node->command);
+	exec->command = get_path(node->command, config);
 	exec->argv = ft_calloc(node->arg_num + 2, sizeof(char *));
 	if (!exec->argv)
 		perror_exit("malloc", EXIT_FAILURE);
-	exec->argv[0] = ft_strdup(exec->command);
+	exec->argv[0] = ft_strdup(node->command);
 	i = -1;
 	while (++i < node->arg_num)
 		exec->argv[i + 1] = ft_strdup(node->argv[i]);

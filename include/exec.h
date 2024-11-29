@@ -6,7 +6,7 @@
 /*   By: nkawaguc <nkawaguc@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/16 22:14:35 by nkawaguc          #+#    #+#             */
-/*   Updated: 2024/11/24 18:26:33 by nkawaguc         ###   ########.fr       */
+/*   Updated: 2024/11/28 22:28:26 by nkawaguc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,7 @@
 # include "util.h"
 # include "macro.h"
 # include "include.h"
+# include "expander.h"
 
 typedef struct s_exec
 {
@@ -52,8 +53,9 @@ int		exec_pipe_left_con(t_node *node, t_pipe_helper ph,
 
 int		exec_command(t_node *node, int in_fd, int out_fd, t_config *config);
 char	**make_envp(t_config *config);
-char	*get_path(char *command);
+char	*get_path(char *command, t_config *config);
 int		is_directory(const char *path);
+int		exec_bi(t_node *node, t_exec *exec, t_config *config);
 
 int		redirect_handler(t_node *node, int *in_fd, int *out_fd);
 

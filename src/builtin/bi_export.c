@@ -6,7 +6,7 @@
 /*   By: nkawaguc <nkawaguc@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/23 21:26:01 by nkawaguc          #+#    #+#             */
-/*   Updated: 2024/11/24 20:42:21 by nkawaguc         ###   ########.fr       */
+/*   Updated: 2024/11/29 00:02:20 by nkawaguc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,6 @@ static void	add_or_update_env(t_config *config, const char *key,
 				const char *value);
 static void	print_invalid_identifier(char *arg, t_config *config);
 static int	update_key_value(char *arg, char *equal_sign, t_config *config);
-static void	export_no_argv(t_config *config);
 
 void	bi_export(t_exec exec, t_config *config)
 {
@@ -85,27 +84,6 @@ static void	print_invalid_identifier(char *arg, t_config *config)
 	config->exit_status = EXIT_INVALID_INPUT;
 }
 
-static void	export_no_argv(t_config *config)
-{
-	int	j;
-
-	j = -1;
-	while (++j < config->envp_num)
-	{
-		ft_putstr_fd("declare -x ", STDOUT_FILENO);
-		ft_putstr_fd(config->envp[j].key, STDOUT_FILENO);
-		if (!config->envp[j].value)
-		{
-			ft_putchar_fd('\n', STDOUT_FILENO);
-			continue ;
-		}
-		ft_putstr_fd("=\"", STDOUT_FILENO);
-		ft_putstr_fd(config->envp[j].value, STDOUT_FILENO);
-		ft_putendl_fd("\"", STDOUT_FILENO);
-	}
-	config->exit_status = EXIT_SUCCESS;
-	return ;
-}
 
 static bool	is_valid_env_name(char *name)
 {
@@ -142,13 +120,20 @@ static void	add_or_update_env(t_config *config, const char *key,
 		}
 		i++;
 	}
-	if (config->envp_num >= config->envp_capacity)
+	if (config->envp_num >= config->envp_capacity - 1)
 	{
 		config->envp_capacity *= 2;
-		config->envp = realloc(config->envp, config->envp_capacity
-				* sizeof(t_env));
+		config->envp = ft_realloc_env(config->envp,
+				sizeof(t_env) * config->envp_capacity / 2,
+				sizeof(t_env) * config->envp_capacity);
 	}
 	config->envp[config->envp_num].key = ft_strdup(key);
+	if (!config->envp[config->envp_num].key)
+	{
+		perror("malloc");
+		config->exit_status = EXIT_FAILURE;
+		return ;
+	}
 	if (value)
 		config->envp[config->envp_num].value = ft_strdup(value);
 	else

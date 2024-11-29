@@ -6,7 +6,7 @@
 /*   By: nkawaguc <nkawaguc@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/15 14:18:14 by nkawaguc          #+#    #+#             */
-/*   Updated: 2024/11/18 19:05:52 by nkawaguc         ###   ########.fr       */
+/*   Updated: 2024/11/28 23:48:23 by nkawaguc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,7 @@
 # include "macro.h"
 # include "include.h"
 # include "util.h"
+# include "expander.h"
 
 typedef enum e_node_type
 {
@@ -64,24 +65,26 @@ typedef struct s_parse_helper
 	t_node	*node;
 }	t_parse_helper;
 
-void	parser(t_node **root, t_data *data, t_config *config);
-t_node	*parse_data(t_data *data, t_parse_helper *helper, t_config *config,
-			const int depth);
-t_node	*parse_connector(t_data *data, t_parse_helper *ps, t_config *config,
-			const int depth);
-t_node	*parse_paren_left(t_data *data, t_parse_helper *ps, t_config *config,
-			const int depth);
-t_node	*parse_paren_right(t_data *data, t_parse_helper *ps, t_config *config,
-			t_node *root);
-t_node	*parse_redirect(t_data *data, t_parse_helper *ps, t_config *config,
-			t_node **root);
-int		parse_heredoc(t_redirect *redirect, t_config *config);
-t_node	*parse_command(t_data *data, t_parse_helper *ps, t_config *config,
-			t_node **root);
-void	dump_node(t_node *node, int depth);
-void	dump_tree(t_node *root);
-void	free_tree(t_node *root);
-t_node	*new_command_node(t_token token);
-t_node	*new_connector_node(t_token token);
+void		parser(t_node **root, t_data *data, t_config *config);
+t_node		*parse_data(t_data *data, t_parse_helper *helper, t_config *config,
+				const int depth);
+t_node		*parse_connector(t_data *data, t_parse_helper *ps, t_config *config,
+				const int depth);
+t_node		*parse_paren_left(t_data *data, t_parse_helper *ps, t_config *config,
+				const int depth);
+t_node		*parse_paren_right(t_data *data, t_parse_helper *ps, t_config *config,
+				t_node *root);
+t_node		*parse_redirect(t_data *data, t_parse_helper *ps, t_config *config,
+				t_node **root);
+int			parse_heredoc(t_redirect *redirect, t_config *config);
+t_node		*parse_command(t_data *data, t_parse_helper *ps, t_config *config,
+				t_node **root);
+void		dump_node(t_node *node, int depth);
+void		dump_tree(t_node *root);
+void		free_tree(t_node *root);
+t_node		*new_command_node(t_token token);
+t_node		*new_connector_node(t_token token);
+t_redirect	*ft_realloc_redirect(t_redirect *ptr, size_t old_size,
+			size_t new_size);
 
 #endif

@@ -1,26 +1,32 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_realloc.c                                       :+:      :+:    :+:   */
+/*   expander.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: nkawaguc <nkawaguc@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/11/14 22:45:51 by nkawaguc          #+#    #+#             */
-/*   Updated: 2024/11/26 23:14:34 by nkawaguc         ###   ########.fr       */
+/*   Created: 2024/11/26 19:00:30 by nkawaguc          #+#    #+#             */
+/*   Updated: 2024/11/27 00:06:33 by nkawaguc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../include/util.h"
+#include "../../include/expander.h"
 
-void	*ft_realloc(void *ptr, size_t old_size, size_t new_size)
+char	**expander(const char *word, t_config *config)
 {
-	void	*new_ptr;
+	char	*env_expanded;
+	char	**expanded;
+	int		i;
 
-	new_ptr = malloc(new_size);
-	if (!new_ptr)
+	env_expanded = expand_env(word, config);
+	if (!env_expanded)
 		return (NULL);
-	ft_bzero(new_ptr, new_size);
-	ft_memcpy(new_ptr, ptr, old_size);
-	free(ptr);
-	return (new_ptr);
+	expanded = expand_wildcard(env_expanded, config);
+	free(env_expanded);
+	if (!expanded)
+		return (NULL);
+	i = -1;
+	while (expanded[++i])
+		del_quote(expanded[i]);
+	return (expanded);
 }

@@ -6,7 +6,7 @@
 /*   By: nkawaguc <nkawaguc@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/16 22:27:01 by nkawaguc          #+#    #+#             */
-/*   Updated: 2024/11/25 12:15:07 by nkawaguc         ###   ########.fr       */
+/*   Updated: 2024/11/29 00:58:30 by nkawaguc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,8 +24,9 @@ int	main(int argc, char **argv, char **envp)
 	t_node		*root;
 	t_config	config;
 
-	(void)argc;
 	(void)argv;
+	if (argc >= 2)
+		ft_putendl_fd("warning: command line arguments will be ignored", STDERR_FILENO);
 	if (init_config(&config, envp) == EXIT_FAILURE)
 	{
 		perror("malloc");
@@ -35,7 +36,7 @@ int	main(int argc, char **argv, char **envp)
 	root = NULL;
 	main_loop(&config, input_data, root, &data);
 	free_config(&config);
-	return (config.exit_status);
+	return (config.last_exit_status);
 }
 
 int event(void)
@@ -51,22 +52,27 @@ static void	main_loop(t_config *config,
 		g_signal = 0;
 		rl_event_hook = event;
 		set_idle_handler();
+		config->last_exit_status = config->exit_status;
 		input_data = readline("minishell$ ");
 		if(g_signal != 0)
 		{
 			config->exit_status = 130;
 			continue ;
 		}
-		add_history(input_data);
 		if (!input_data)
 		{
 			ft_putendl_fd("exit", STDERR_FILENO);
 			break ;
 		}
+		if (ft_strlen(input_data) > 0)
+			add_history(input_data);
 		config->exit_status = lexer(input_data, data, config);
-		if (ft_strlen(input_data) == 0 || config->exit_status != EXIT_SUCCESS)
+		if (data->token_num == 0 || config->exit_status != EXIT_SUCCESS)
 		{
+			if (data->token_num == 0)
+				config->exit_status = config->last_exit_status;
 			free(input_data);
+			free_data(data);
 			continue ;
 		}
 		free(input_data);

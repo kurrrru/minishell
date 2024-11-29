@@ -1,26 +1,28 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_realloc.c                                       :+:      :+:    :+:   */
+/*   free_3d.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: nkawaguc <nkawaguc@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/11/14 22:45:51 by nkawaguc          #+#    #+#             */
-/*   Updated: 2024/11/26 23:14:34 by nkawaguc         ###   ########.fr       */
+/*   Created: 2024/11/26 20:12:25 by nkawaguc          #+#    #+#             */
+/*   Updated: 2024/11/26 20:13:06 by nkawaguc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/util.h"
 
-void	*ft_realloc(void *ptr, size_t old_size, size_t new_size)
+void	free_3d(char ***arr)
 {
-	void	*new_ptr;
+	int	i;
 
-	new_ptr = malloc(new_size);
-	if (!new_ptr)
-		return (NULL);
-	ft_bzero(new_ptr, new_size);
-	ft_memcpy(new_ptr, ptr, old_size);
-	free(ptr);
-	return (new_ptr);
+	if (!arr)
+		return ;
+	i = 0;
+	while (arr[i])
+	{
+		free_2d(arr[i]);
+		i++;
+	}
+	free(arr);
 }

@@ -6,7 +6,7 @@
 /*   By: nkawaguc <nkawaguc@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/16 16:16:26 by nkawaguc          #+#    #+#             */
-/*   Updated: 2024/11/18 19:20:49 by nkawaguc         ###   ########.fr       */
+/*   Updated: 2024/11/28 23:47:31 by nkawaguc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,7 +70,7 @@ static t_node	*new_redirect(t_token token, t_token file_token, t_node **root,
 		config->exit_status = EXIT_FAILURE;
 		return (perror("malloc"), free_tree(*root), NULL);
 	}
-	if ((*root)->redirect_num >= (*root)->redirect_capacity)
+	if ((*root)->redirect_num >= (*root)->redirect_capacity - 1)
 	{
 		if (double_redirect(config, root) == EXIT_FAILURE)
 			return (NULL);
@@ -87,7 +87,7 @@ static t_node	*new_redirect(t_token token, t_token file_token, t_node **root,
 static int	double_redirect(t_config *config, t_node **root)
 {
 	(*root)->redirect_capacity *= 2;
-	(*root)->redirect = ft_realloc((*root)->redirect,
+	(*root)->redirect = ft_realloc_redirect((*root)->redirect,
 			sizeof(t_redirect) * (*root)->redirect_capacity / 2,
 			sizeof(t_redirect) * (*root)->redirect_capacity);
 	if ((*root)->redirect == NULL)

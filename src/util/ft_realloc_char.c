@@ -1,26 +1,26 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_realloc.c                                       :+:      :+:    :+:   */
+/*   ft_realloc_char.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: nkawaguc <nkawaguc@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/11/14 22:45:51 by nkawaguc          #+#    #+#             */
-/*   Updated: 2024/11/26 23:14:34 by nkawaguc         ###   ########.fr       */
+/*   Created: 2024/11/28 23:26:57 by nkawaguc          #+#    #+#             */
+/*   Updated: 2024/11/28 23:29:55 by nkawaguc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/util.h"
 
-void	*ft_realloc(void *ptr, size_t old_size, size_t new_size)
+char	**ft_realloc_char(char **ptr, size_t old_size, size_t new_size)
 {
-	void	*new_ptr;
+	char	**new_ptr;
 
-	new_ptr = malloc(new_size);
+	new_ptr = ft_realloc(ptr, old_size, new_size);
 	if (!new_ptr)
+	{
+		free_2d(ptr);
 		return (NULL);
-	ft_bzero(new_ptr, new_size);
-	ft_memcpy(new_ptr, ptr, old_size);
-	free(ptr);
+	}
 	return (new_ptr);
 }

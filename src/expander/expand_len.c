@@ -1,26 +1,23 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_realloc.c                                       :+:      :+:    :+:   */
+/*   expand_len.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: nkawaguc <nkawaguc@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/11/14 22:45:51 by nkawaguc          #+#    #+#             */
-/*   Updated: 2024/11/26 23:14:34 by nkawaguc         ###   ########.fr       */
+/*   Created: 2024/11/26 19:36:09 by nkawaguc          #+#    #+#             */
+/*   Updated: 2024/11/26 20:38:24 by nkawaguc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../include/util.h"
+#include "../../include/expander.h"
 
-void	*ft_realloc(void *ptr, size_t old_size, size_t new_size)
+int	expand_len(char **expanded)
 {
-	void	*new_ptr;
+	int	i;
 
-	new_ptr = malloc(new_size);
-	if (!new_ptr)
-		return (NULL);
-	ft_bzero(new_ptr, new_size);
-	ft_memcpy(new_ptr, ptr, old_size);
-	free(ptr);
-	return (new_ptr);
+	i = 0;
+	while (expanded[i])
+		i++;
+	return (i);
 }

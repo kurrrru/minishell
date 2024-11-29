@@ -6,7 +6,7 @@
 /*   By: nkawaguc <nkawaguc@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/23 21:26:29 by nkawaguc          #+#    #+#             */
-/*   Updated: 2024/11/24 17:43:09 by nkawaguc         ###   ########.fr       */
+/*   Updated: 2024/11/26 22:48:52 by nkawaguc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,10 +35,10 @@ void	bi_exit(t_exec exec, t_config *config)
 			ft_putstr_fd("exit: ", STDERR_FILENO);
 			ft_putstr_fd(exec.argv[1], STDERR_FILENO);
 			ft_putendl_fd(": numeric argument required", STDERR_FILENO);
-			config->exit_status = EXIT_FAILURE;
+			config->last_exit_status = EXIT_INVALID_INPUT;
 		}
 	}
-	exit(config->exit_status);
+	exit(config->last_exit_status);
 }
 
 static bool	is_num(const char *str)

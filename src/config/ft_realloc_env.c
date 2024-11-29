@@ -1,26 +1,35 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_realloc.c                                       :+:      :+:    :+:   */
+/*   ft_realloc_env.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: nkawaguc <nkawaguc@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/11/14 22:45:51 by nkawaguc          #+#    #+#             */
-/*   Updated: 2024/11/26 23:14:34 by nkawaguc         ###   ########.fr       */
+/*   Created: 2024/11/28 23:40:04 by nkawaguc          #+#    #+#             */
+/*   Updated: 2024/11/28 23:49:05 by nkawaguc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../include/util.h"
+#include "../../include/config.h"
 
-void	*ft_realloc(void *ptr, size_t old_size, size_t new_size)
+t_env	*ft_realloc_env(t_env *ptr, size_t old_size, size_t new_size)
 {
-	void	*new_ptr;
+	t_env	*new_ptr;
+	int		i;
+	int		num;
 
-	new_ptr = malloc(new_size);
+	new_ptr = ft_realloc(ptr, old_size, new_size);
 	if (!new_ptr)
+	{
+		num = old_size / sizeof(t_env);
+		i = -1;
+		while (++i < num)
+		{
+			free(ptr[i].key);
+			free(ptr[i].value);
+		}
+		free(ptr);
 		return (NULL);
-	ft_bzero(new_ptr, new_size);
-	ft_memcpy(new_ptr, ptr, old_size);
-	free(ptr);
+	}
 	return (new_ptr);
 }

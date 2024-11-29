@@ -10,8 +10,12 @@ void	construct_bi_exec(t_exec *exec, t_node *node, t_config *config)
 	if (!node->command)
 		config->exit_status = EXIT_SUCCESS;
 	set_builtin_path(exec, node);
-	if (!exec->command)
-		exec->command = get_path(node->command);
+	if (exec->command == NULL)
+	{
+		config->exit_status = EXIT_FAILURE;
+		perror("malloc");
+		return ;
+	}
 	exec->argv = ft_calloc(node->arg_num + 2, sizeof(char *));
 	if (!exec->argv)
 	{
