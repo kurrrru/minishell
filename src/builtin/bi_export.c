@@ -6,7 +6,7 @@
 /*   By: nkawaguc <nkawaguc@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/23 21:26:01 by nkawaguc          #+#    #+#             */
-/*   Updated: 2024/11/29 00:02:20 by nkawaguc         ###   ########.fr       */
+/*   Updated: 2024/11/30 00:04:30 by nkawaguc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,7 +83,6 @@ static void	print_invalid_identifier(char *arg, t_config *config)
 	ft_putendl_fd(": not a valid identifier", STDERR_FILENO);
 	config->exit_status = EXIT_INVALID_INPUT;
 }
-
 
 static bool	is_valid_env_name(char *name)
 {

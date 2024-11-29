@@ -6,13 +6,13 @@
 /*   By: nkawaguc <nkawaguc@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/16 22:27:01 by nkawaguc          #+#    #+#             */
-/*   Updated: 2024/11/29 00:58:30 by nkawaguc         ###   ########.fr       */
+/*   Updated: 2024/11/30 00:06:31 by nkawaguc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/minishell.h"
 
-extern sig_atomic_t g_signal;
+extern sig_atomic_t	g_signal;
 
 static void	main_loop(t_config *config,
 				char *input_data, t_node *root, t_data *data);
@@ -26,7 +26,8 @@ int	main(int argc, char **argv, char **envp)
 
 	(void)argv;
 	if (argc >= 2)
-		ft_putendl_fd("warning: command line arguments will be ignored", STDERR_FILENO);
+		ft_putendl_fd("warning: command line arguments \
+will be ignored", STDERR_FILENO);
 	if (init_config(&config, envp) == EXIT_FAILURE)
 	{
 		perror("malloc");
@@ -39,7 +40,7 @@ int	main(int argc, char **argv, char **envp)
 	return (config.last_exit_status);
 }
 
-int event(void)
+static int	event(void)
 {
 	return (0);
 }
@@ -54,7 +55,7 @@ static void	main_loop(t_config *config,
 		set_idle_handler();
 		config->last_exit_status = config->exit_status;
 		input_data = readline("minishell$ ");
-		if(g_signal != 0)
+		if (g_signal != 0)
 		{
 			config->exit_status = 130;
 			continue ;

@@ -1,10 +1,22 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   signals.c                                          :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: nkawaguc <nkawaguc@student.42tokyo.jp>     +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/11/30 00:07:35 by nkawaguc          #+#    #+#             */
+/*   Updated: 2024/11/30 00:07:36 by nkawaguc         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../../include/signals.h"
 
-volatile sig_atomic_t g_signal;
+volatile sig_atomic_t	g_signal;
 
 void	idle_handler(int signum)
 {
-	(void) signum;
+	(void)signum;
 	g_signal = SIGINT;
 	rl_replace_line("", 0);
 	rl_done = 1;
@@ -25,7 +37,7 @@ void	set_heredoc_child_handler(void)
 	sigemptyset(&sig.sa_mask);
 	sig.sa_flags = 0;
 	sigaction(SIGQUIT, &sig, NULL);
-	sig.sa_handler = SIG_DFL; 
+	sig.sa_handler = SIG_DFL;
 	sigaction(SIGINT, &sig, NULL);
 }
 
@@ -63,7 +75,7 @@ void	exec_handler(int signum)
 	}
 }
 
-void check_core_dump(int status)
+void	check_core_dump(int status)
 {
 	if (WCOREDUMP(status))
 	{
@@ -73,7 +85,7 @@ void check_core_dump(int status)
 		rl_on_new_line();
 	}
 }
-			
+
 void	set_exec_child_handler(void)
 {
 	struct sigaction	sig;
@@ -85,7 +97,7 @@ void	set_exec_child_handler(void)
 	sigaction(SIGQUIT, &sig, NULL);
 }
 
-void	set_exec_handler()
+void	set_exec_handler(void)
 {
 	struct sigaction	sig;
 

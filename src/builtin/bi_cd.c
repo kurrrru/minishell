@@ -6,7 +6,7 @@
 /*   By: nkawaguc <nkawaguc@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/23 21:26:25 by nkawaguc          #+#    #+#             */
-/*   Updated: 2024/11/28 23:59:59 by nkawaguc         ###   ########.fr       */
+/*   Updated: 2024/11/30 00:04:21 by nkawaguc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -108,7 +108,8 @@ static void	update_env(t_config *config, const char *key, const char *value)
 	}
 	config->envp[config->envp_num].key = ft_strdup(key);
 	config->envp[config->envp_num].value = ft_strdup(value);
-	if (!config->envp[config->envp_num].key || !config->envp[config->envp_num].value)
+	if (!config->envp[config->envp_num].key
+		|| !config->envp[config->envp_num].value)
 	{
 		perror("malloc");
 		config->exit_status = EXIT_FAILURE;

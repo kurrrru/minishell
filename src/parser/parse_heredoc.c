@@ -6,13 +6,14 @@
 /*   By: nkawaguc <nkawaguc@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/26 21:53:27 by nkawaguc          #+#    #+#             */
-/*   Updated: 2024/11/29 23:31:02 by nkawaguc         ###   ########.fr       */
+/*   Updated: 2024/11/30 00:02:25 by nkawaguc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/parser.h"
 
-static int heredoc_read(t_redirect *redirect, int heredoc_fd[2], t_config *config);
+static int	heredoc_read(t_redirect *redirect,
+				int heredoc_fd[2], t_config *config);
 
 int	parse_heredoc(t_redirect *redirect, t_config *config)
 {
@@ -21,13 +22,15 @@ int	parse_heredoc(t_redirect *redirect, t_config *config)
 	if (pipe(heredoc_fd) == -1)
 		return (perror("pipe"), EXIT_FAILURE);
 	if (heredoc_read(redirect, heredoc_fd, config) != EXIT_SUCCESS)
-		return (close(heredoc_fd[0]), close(heredoc_fd[1]), config->exit_status);
+		return (close(heredoc_fd[0]), close(heredoc_fd[1]),
+			config->exit_status);
 	close(heredoc_fd[1]);
 	redirect->heredoc_fd = heredoc_fd[0];
 	return (EXIT_SUCCESS);
 }
 
-static int heredoc_read(t_redirect *redirect, int heredoc_fd[2], t_config *config)
+static int	heredoc_read(t_redirect *redirect,
+				int heredoc_fd[2], t_config *config)
 {
 	pid_t	pid;
 	char	*line;
@@ -75,7 +78,7 @@ delimited by end-of-file (wanted `", STDERR_FILENO);
 	{
 		waitpid(pid, &config->exit_status, 0);
 		config->exit_status = extract_status(config->exit_status);
-		if(config->exit_status == 130)
+		if (config->exit_status == 130)
 		{
 			ft_putchar_fd('\n', STDOUT_FILENO);
 			return (config->exit_status);
