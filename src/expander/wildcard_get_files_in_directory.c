@@ -6,7 +6,7 @@
 /*   By: nkawaguc <nkawaguc@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/30 17:40:44 by nkawaguc          #+#    #+#             */
-/*   Updated: 2024/11/30 17:50:58 by nkawaguc         ###   ########.fr       */
+/*   Updated: 2024/11/30 19:14:13 by nkawaguc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,7 +45,7 @@ char	**get_files_in_directory(void)
 
 static int	add_to_files(char ***files, int *count, int *capacity, char *entry)
 {
-	if (*count + 1 >= *capacity)
+	if (*count + 2 >= *capacity)
 	{
 		*capacity *= 2;
 		*files = ft_realloc_char(*files, sizeof(char *) * (*capacity / 2),
