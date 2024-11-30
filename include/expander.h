@@ -6,7 +6,7 @@
 /*   By: nkawaguc <nkawaguc@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/26 02:24:21 by nkawaguc          #+#    #+#             */
-/*   Updated: 2024/11/30 17:48:53 by nkawaguc         ###   ########.fr       */
+/*   Updated: 2024/11/30 20:41:00 by nkawaguc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,6 +22,14 @@
 
 struct					s_node;
 typedef struct s_node	t_node;
+
+typedef struct s_wildcard
+{
+	char	**files;
+	char	**expanded;
+	size_t	count;
+	size_t	capacity;
+}	t_wildcard;
 
 char	**expander(const char *word, t_config *config);
 

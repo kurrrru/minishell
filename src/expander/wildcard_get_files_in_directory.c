@@ -6,7 +6,7 @@
 /*   By: nkawaguc <nkawaguc@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/30 17:40:44 by nkawaguc          #+#    #+#             */
-/*   Updated: 2024/11/30 19:14:13 by nkawaguc         ###   ########.fr       */
+/*   Updated: 2024/11/30 20:25:52 by nkawaguc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,11 +24,11 @@ char	**get_files_in_directory(void)
 
 	dir = opendir(".");
 	if (!dir)
-		return (NULL);
+		return (perror("opendir"), NULL);
 	capacity = 2;
 	files = ft_calloc(capacity, sizeof(char *));
 	if (!files)
-		return (NULL);
+		return (perror("malloc"), NULL);
 	files[0] = NULL;
 	count = -1;
 	while (1)

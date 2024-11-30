@@ -6,7 +6,7 @@
 /*   By: nkawaguc <nkawaguc@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/26 21:53:27 by nkawaguc          #+#    #+#             */
-/*   Updated: 2024/11/30 00:02:25 by nkawaguc         ###   ########.fr       */
+/*   Updated: 2024/11/30 22:05:58 by nkawaguc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,7 @@
 
 static int	heredoc_read(t_redirect *redirect,
 				int heredoc_fd[2], t_config *config);
+static void	eof_warning(t_redirect *redirect);
 
 int	parse_heredoc(t_redirect *redirect, t_config *config)
 {
@@ -49,13 +50,7 @@ static int	heredoc_read(t_redirect *redirect,
 		{
 			line = readline("> ");
 			if (!line)
-			{
-				ft_putstr_fd("bash: warning: here-document \
-delimited by end-of-file (wanted `", STDERR_FILENO);
-				ft_putstr_fd(redirect->file, STDERR_FILENO);
-				ft_putendl_fd("')", STDERR_FILENO);
-				exit(EXIT_SUCCESS);
-			}
+				eof_warning(redirect);
 			if (ft_strcmp(line, redirect->file) == 0)
 			{
 				free(line);
@@ -79,10 +74,16 @@ delimited by end-of-file (wanted `", STDERR_FILENO);
 		waitpid(pid, &config->exit_status, 0);
 		config->exit_status = extract_status(config->exit_status);
 		if (config->exit_status == 130)
-		{
-			ft_putchar_fd('\n', STDOUT_FILENO);
-			return (config->exit_status);
-		}
+			return (ft_putchar_fd('\n', STDOUT_FILENO), config->exit_status);
 	}
 	return (EXIT_SUCCESS);
+}
+
+static void	eof_warning(t_redirect *redirect)
+{
+	ft_putstr_fd("bash: warning: here-document \
+delimited by end-of-file (wanted `", STDERR_FILENO);
+	ft_putstr_fd(redirect->file, STDERR_FILENO);
+	ft_putendl_fd("')", STDERR_FILENO);
+	exit(EXIT_SUCCESS);
 }
