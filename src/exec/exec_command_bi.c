@@ -6,7 +6,7 @@
 /*   By: nkawaguc <nkawaguc@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/30 00:04:36 by nkawaguc          #+#    #+#             */
-/*   Updated: 2024/11/30 00:04:36 by nkawaguc         ###   ########.fr       */
+/*   Updated: 2024/11/30 16:29:43 by nkawaguc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,41 +14,33 @@
 
 static void	set_bi_fd(t_node *node, t_exec *exec, t_config *config);
 
-void	construct_bi_exec(t_exec *exec, t_node *node, t_config *config)
+int	construct_bi_exec(t_exec *exec, t_node *node, t_config *config)
 {
 	int	i;
 
 	set_bi_fd(node, exec, config);
 	if (!node->command)
-		config->exit_status = EXIT_SUCCESS;
+		config->exit_status = EXIT_FAILURE;
 	set_builtin_path(exec, node);
 	if (exec->command == NULL)
-	{
-		config->exit_status = EXIT_FAILURE;
-		perror("malloc");
-		return ;
-	}
+		return (perror("malloc"), EXIT_FAILURE);
 	exec->argv = ft_calloc(node->arg_num + 2, sizeof(char *));
 	if (!exec->argv)
-	{
-		config->exit_status = EXIT_FAILURE;
-		perror("malloc");
-	}
+		return (perror("malloc"), EXIT_FAILURE);
 	exec->argv[0] = ft_strdup(exec->command);
+	if (!exec->argv[0])
+		return (perror("malloc"), EXIT_FAILURE);
 	i = -1;
 	while (++i < node->arg_num)
 		exec->argv[i + 1] = ft_strdup(node->argv[i]);
-	exec->argv[node->arg_num + 1] = NULL;
 	exec->envp = NULL;
 	if (config->envp_num > 0)
 	{
 		exec->envp = make_envp(config);
 		if (!exec->envp)
-		{
-			config->exit_status = EXIT_FAILURE;
-			perror("malloc");
-		}
+			return (perror("malloc"), EXIT_FAILURE);
 	}
+	return (EXIT_SUCCESS);
 }
 
 static void	set_bi_fd(t_node *node, t_exec *exec, t_config *config)

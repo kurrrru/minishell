@@ -6,7 +6,7 @@
 /*   By: nkawaguc <nkawaguc@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/18 00:29:48 by nkawaguc          #+#    #+#             */
-/*   Updated: 2024/11/28 22:28:34 by nkawaguc         ###   ########.fr       */
+/*   Updated: 2024/11/30 11:09:38 by nkawaguc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,6 +69,8 @@ static void	construct_exec(t_exec *exec, t_node *node, t_config *config)
 	if (!exec->argv)
 		perror_exit("malloc", EXIT_FAILURE);
 	exec->argv[0] = ft_strdup(node->command);
+	if (!exec->argv[0])
+		perror_exit("malloc", EXIT_FAILURE);
 	i = -1;
 	while (++i < node->arg_num)
 		exec->argv[i + 1] = ft_strdup(node->argv[i]);

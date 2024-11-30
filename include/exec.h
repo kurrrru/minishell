@@ -6,7 +6,7 @@
 /*   By: nkawaguc <nkawaguc@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/16 22:14:35 by nkawaguc          #+#    #+#             */
-/*   Updated: 2024/11/28 22:28:26 by nkawaguc         ###   ########.fr       */
+/*   Updated: 2024/11/30 11:04:23 by nkawaguc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,6 +62,6 @@ int		redirect_handler(t_node *node, int *in_fd, int *out_fd);
 void	perror_exit(char *message, int exit_status);
 
 void	free_exec(t_exec *exec);
-void	construct_bi_exec(t_exec *exec, t_node *node, t_config *config);
+int		construct_bi_exec(t_exec *exec, t_node *node, t_config *config);
 
 #endif

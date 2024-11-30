@@ -6,7 +6,7 @@
 /*   By: nkawaguc <nkawaguc@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/17 02:05:02 by nkawaguc          #+#    #+#             */
-/*   Updated: 2024/11/29 00:14:39 by nkawaguc         ###   ########.fr       */
+/*   Updated: 2024/11/30 16:40:56 by nkawaguc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,10 +50,20 @@ static char	**get_path_list(t_config *config)
 {
 	char	*path_env;
 	char	**path_list;
+	char	cwd[PATH_MAX + 1];
 
 	path_env = find_env("PATH", config);
 	if (!path_env)
-		path_env = getcwd(NULL, 0);
+		exit(EXIT_FAILURE);
+	if (ft_strlen(path_env) == 0)
+	{
+		free(path_env);
+		if (getcwd(cwd, PATH_MAX) == NULL)
+			perror_exit("getcwd", EXIT_FAILURE);
+		path_env = ft_strdup(cwd);
+		if (!path_env)
+			perror_exit("malloc", EXIT_FAILURE);
+	}
 	path_list = ft_split(path_env, ':');
 	if (!path_list)
 		perror_exit("ft_split", EXIT_FAILURE);

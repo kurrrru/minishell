@@ -6,14 +6,11 @@
 /*   By: nkawaguc <nkawaguc@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/26 19:01:01 by nkawaguc          #+#    #+#             */
-/*   Updated: 2024/11/29 11:50:40 by nkawaguc         ###   ########.fr       */
+/*   Updated: 2024/11/30 17:49:14 by nkawaguc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/expander.h"
-
-static char	**get_files_in_directory(void);
-static void	sort_strings(char **strings);
 
 char	**expand_wildcard(const char *pattern, t_config *config)
 {
@@ -84,81 +81,6 @@ char	**expand_wildcard(const char *pattern, t_config *config)
 	}
 	sort_strings(expanded);
 	return (expanded);
-}
-
-static char	**get_files_in_directory(void)
-{
-	DIR				*dir;
-	struct dirent	*entry;
-	char			**files;
-	int				count;
-	int				capacity;
-
-	dir = opendir(".");
-	if (!dir)
-		return (NULL);
-	capacity = 2;
-	files = ft_calloc(capacity, sizeof(char *));
-	if (!files)
-		return (NULL);
-	files[0] = NULL;
-	count = -1;
-	while (1)
-	{
-		entry = readdir(dir);
-		if (!entry)
-			break ;
-		if (count + 2 >= capacity)
-		{
-			capacity *= 2;
-			files = ft_realloc_char(files, sizeof(char *) * (capacity / 2),
-					sizeof(char *) * capacity);
-			if (!files)
-			{
-				perror("ft_realloc");
-				closedir(dir);
-				return (NULL);
-			}
-		}
-		files[++count] = ft_strdup(entry->d_name);
-		if (!files[count])
-		{
-			perror("malloc");
-			free_2d(files);
-			closedir(dir);
-			return (NULL);
-		}
-	}
-	closedir(dir);
-	return (files);
-}
-
-static void	sort_strings(char **strings)
-{
-	int		i;
-	int		j;
-	int		len;
-	char	*tmp;
-
-	len = 0;
-	while (strings[len])
-		len++;
-	i = 0;
-	while (i < len - 1)
-	{
-		j = i + 1;
-		while (j < len)
-		{
-			if (ft_strcmp(strings[i], strings[j]) > 0)
-			{
-				tmp = strings[i];
-				strings[i] = strings[j];
-				strings[j] = tmp;
-			}
-			j++;
-		}
-		i++;
-	}
 }
 
 // int main(int argc, char **argv)

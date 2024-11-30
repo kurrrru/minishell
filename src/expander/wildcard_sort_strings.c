@@ -1,28 +1,41 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   minishell.h                                        :+:      :+:    :+:   */
+/*   wildcard_sort_string.c                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: nkawaguc <nkawaguc@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/11/16 22:27:13 by nkawaguc          #+#    #+#             */
-/*   Updated: 2024/11/30 10:31:40 by nkawaguc         ###   ########.fr       */
+/*   Created: 2024/11/30 17:48:26 by nkawaguc          #+#    #+#             */
+/*   Updated: 2024/11/30 17:48:31 by nkawaguc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef MINISHELL_H
-# define MINISHELL_H
+#include "../../include/expander.h"
 
-# include "lexer.h"
-# include "parser.h"
-# include "config.h"
-# include "signals.h"
-# include "exec.h"
-# include "util.h"
-# include "macro.h"
-# include "include.h"
+void	sort_strings(char **strings)
+{
+	int		i;
+	int		j;
+	int		len;
+	char	*tmp;
 
-void	main_loop(t_config *config,
-			char *input_data, t_node *root, t_data *data);
-
-#endif
+	len = 0;
+	while (strings[len])
+		len++;
+	i = 0;
+	while (i < len - 1)
+	{
+		j = i + 1;
+		while (j < len)
+		{
+			if (ft_strcmp(strings[i], strings[j]) > 0)
+			{
+				tmp = strings[i];
+				strings[i] = strings[j];
+				strings[j] = tmp;
+			}
+			j++;
+		}
+		i++;
+	}
+}

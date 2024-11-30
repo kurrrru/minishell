@@ -6,15 +6,13 @@
 /*   By: nkawaguc <nkawaguc@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/23 21:26:01 by nkawaguc          #+#    #+#             */
-/*   Updated: 2024/11/30 00:04:30 by nkawaguc         ###   ########.fr       */
+/*   Updated: 2024/11/30 16:47:50 by nkawaguc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/builtin.h"
 
 static bool	is_valid_env_name(char *name);
-static void	add_or_update_env(t_config *config, const char *key,
-				const char *value);
 static void	print_invalid_identifier(char *arg, t_config *config);
 static int	update_key_value(char *arg, char *equal_sign, t_config *config);
 
@@ -98,44 +96,4 @@ static bool	is_valid_env_name(char *name)
 		i++;
 	}
 	return (true);
-}
-
-static void	add_or_update_env(t_config *config, const char *key,
-		const char *value)
-{
-	int	i;
-
-	i = 0;
-	while (i < config->envp_num)
-	{
-		if (ft_strcmp(config->envp[i].key, key) == 0)
-		{
-			free(config->envp[i].value);
-			if (value)
-				config->envp[i].value = ft_strdup(value);
-			else
-				config->envp[i].value = NULL;
-			return ;
-		}
-		i++;
-	}
-	if (config->envp_num >= config->envp_capacity - 1)
-	{
-		config->envp_capacity *= 2;
-		config->envp = ft_realloc_env(config->envp,
-				sizeof(t_env) * config->envp_capacity / 2,
-				sizeof(t_env) * config->envp_capacity);
-	}
-	config->envp[config->envp_num].key = ft_strdup(key);
-	if (!config->envp[config->envp_num].key)
-	{
-		perror("malloc");
-		config->exit_status = EXIT_FAILURE;
-		return ;
-	}
-	if (value)
-		config->envp[config->envp_num].value = ft_strdup(value);
-	else
-		config->envp[config->envp_num].value = NULL;
-	config->envp_num++;
 }

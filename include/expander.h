@@ -6,7 +6,7 @@
 /*   By: nkawaguc <nkawaguc@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/26 02:24:21 by nkawaguc          #+#    #+#             */
-/*   Updated: 2024/11/29 23:53:48 by nkawaguc         ###   ########.fr       */
+/*   Updated: 2024/11/30 17:48:53 by nkawaguc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,5 +40,9 @@ char	**expand_wildcard(const char *pattern, t_config *config);
 int		expand_len(char **expanded);
 
 int		expand_command_node(t_node *node, t_config *config);
+
+char	**get_files_in_directory(void);
+
+void	sort_strings(char **strings);
 
 #endif

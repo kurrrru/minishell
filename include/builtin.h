@@ -6,7 +6,7 @@
 /*   By: nkawaguc <nkawaguc@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/23 21:26:52 by nkawaguc          #+#    #+#             */
-/*   Updated: 2024/11/28 10:47:30 by nkawaguc         ###   ########.fr       */
+/*   Updated: 2024/11/30 16:47:48 by nkawaguc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,5 +39,7 @@ void	bi_export(t_exec exec, t_config *config);
 void	export_no_argv(t_config *config);
 
 void	set_builtin_path(t_exec *exec, t_node *node);
+
+void	add_or_update_env(t_config *config, const char *key, const char *value);
 
 #endif

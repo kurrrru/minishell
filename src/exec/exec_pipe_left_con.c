@@ -6,7 +6,7 @@
 /*   By: nkawaguc <nkawaguc@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/17 23:55:25 by nkawaguc          #+#    #+#             */
-/*   Updated: 2024/11/24 17:15:48 by nkawaguc         ###   ########.fr       */
+/*   Updated: 2024/11/30 10:56:59 by nkawaguc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,13 +21,11 @@ int	exec_pipe_left_con(t_node *node, t_pipe_helper ph,
 		t_config *config)
 {
 	if (node->right->type == NODE_COMMAND)
-	{
-		return (exec_pipe_left_con_right_cmd(node, ph, config));
-	}
+		config->exit_status
+			= exec_pipe_left_con_right_cmd(node, ph, config);
 	else
-	{
-		return (exec_pipe_left_con_right_con(node, ph, config));
-	}
+		config->exit_status
+			= exec_pipe_left_con_right_con(node, ph, config);
 	return (config->exit_status);
 }
 
