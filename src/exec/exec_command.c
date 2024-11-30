@@ -6,7 +6,7 @@
 /*   By: nkawaguc <nkawaguc@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/18 00:29:48 by nkawaguc          #+#    #+#             */
-/*   Updated: 2024/11/30 11:09:38 by nkawaguc         ###   ########.fr       */
+/*   Updated: 2024/11/30 19:49:53 by nkawaguc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,6 +23,8 @@ int	exec_command(t_node *node, int in_fd, int out_fd, t_config *config)
 	exec.in_fd = in_fd;
 	exec.out_fd = out_fd;
 	exec.command = NULL;
+	exec.argv = NULL;
+	exec.envp = NULL;
 	if (!is_builtin_fxn(node))
 	{
 		construct_exec(&exec, node, config);

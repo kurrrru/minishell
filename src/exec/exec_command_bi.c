@@ -6,7 +6,7 @@
 /*   By: nkawaguc <nkawaguc@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/30 00:04:36 by nkawaguc          #+#    #+#             */
-/*   Updated: 2024/11/30 16:29:43 by nkawaguc         ###   ########.fr       */
+/*   Updated: 2024/11/30 19:48:16 by nkawaguc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,8 +19,8 @@ int	construct_bi_exec(t_exec *exec, t_node *node, t_config *config)
 	int	i;
 
 	set_bi_fd(node, exec, config);
-	if (!node->command)
-		config->exit_status = EXIT_FAILURE;
+	if (config->exit_status != EXIT_SUCCESS)
+		return (config->exit_status);
 	set_builtin_path(exec, node);
 	if (exec->command == NULL)
 		return (perror("malloc"), EXIT_FAILURE);
@@ -46,7 +46,10 @@ int	construct_bi_exec(t_exec *exec, t_node *node, t_config *config)
 static void	set_bi_fd(t_node *node, t_exec *exec, t_config *config)
 {
 	if (redirect_handler(node, &exec->in_fd, &exec->out_fd))
+	{
 		config->exit_status = EXIT_FAILURE;
+		return ;
+	}
 	if (exec->in_fd != 0)
 	{
 		if (dup2(exec->in_fd, 0) == -1)
