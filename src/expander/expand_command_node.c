@@ -6,7 +6,7 @@
 /*   By: nkawaguc <nkawaguc@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/26 20:04:34 by nkawaguc          #+#    #+#             */
-/*   Updated: 2024/11/27 01:21:46 by nkawaguc         ###   ########.fr       */
+/*   Updated: 2024/11/30 17:31:33 by nkawaguc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,8 @@
 
 static int	expand_command_and_arg(t_node *node, t_config *config);
 static int	expand_redirect(t_node *node, t_config *config);
+static int	replace_by_expanded(t_node *node, char ***expanded_arr);
+static int	calc_capacity(t_node *node, char ***expanded_arr);
 
 int	expand_command_node(t_node *node, t_config *config)
 {
@@ -29,75 +31,26 @@ int	expand_command_node(t_node *node, t_config *config)
 static int	expand_command_and_arg(t_node *node, t_config *config)
 {
 	int		i;
-	int		j;
-	int		k;
 	char	***expanded_arr;
 
 	if (!node->command)
 		return (EXIT_SUCCESS);
 	expanded_arr = ft_calloc(node->arg_num + 1, sizeof(char **));
 	if (!expanded_arr)
-	{
-		perror("ft_calloc");
-		return (EXIT_FAILURE);
-	}
+		return (perror("ft_calloc"), EXIT_FAILURE);
 	expanded_arr[0] = expander(node->command, config);
 	if (!expanded_arr[0])
-	{
-		free_3d(expanded_arr);
-		return (EXIT_FAILURE);
-	}
+		return (free_3d(expanded_arr), EXIT_FAILURE);
 	i = -1;
 	while (++i < node->arg_num)
 	{
 		expanded_arr[i + 1] = expander(node->argv[i], config);
 		if (!expanded_arr[i + 1])
-		{
-			free_3d(expanded_arr);
-			return (EXIT_FAILURE);
-		}
+			return (free_3d(expanded_arr), EXIT_FAILURE);
 	}
 	free(node->command);
 	free_2d(node->argv);
-	node->command = expanded_arr[0][0];
-	node->arg_capacity = expand_len(expanded_arr[0]);
-	i = -1;
-	while (++i < node->arg_num)
-	{
-		node->arg_capacity += expand_len(expanded_arr[i + 1]);
-	}
-	node->argv = ft_calloc(node->arg_capacity + 1, sizeof(char *));
-	if (!node->argv)
-	{
-		perror("ft_calloc");
-		free_3d(expanded_arr);
-		return (EXIT_FAILURE);
-	}
-	i = 0;
-	j = 0;
-	k = 1;
-	while (expanded_arr[0][k])
-	{
-		node->argv[i] = expanded_arr[0][k];
-		i++;
-		k++;
-	}
-	free(expanded_arr[0]);
-	while (j < node->arg_num)
-	{
-		k = 0;
-		while (expanded_arr[j + 1][k])
-		{
-			node->argv[i] = expanded_arr[j + 1][k];
-			i++;
-			k++;
-		}
-		j++;
-		free(expanded_arr[j]);
-	}
-	free(expanded_arr);
-	node->arg_num = i;
-	return (EXIT_SUCCESS);
+	return (replace_by_expanded(node, expanded_arr));
 }
 
 static int	expand_redirect(t_node *node, t_config *config)
@@ -123,4 +76,44 @@ static int	expand_redirect(t_node *node, t_config *config)
 		free(expanded);
 	}
 	return (EXIT_SUCCESS);
+}
+
+static int	calc_capacity(t_node *node, char ***expanded_arr)
+{
+	int		i;
+	int		capacity;
+
+	capacity = expand_len(expanded_arr[0]);
+	i = 0;
+	while (++i < node->arg_num + 1)
+		capacity += expand_len(expanded_arr[i]);
+	return (capacity);
+}
+
+static int	replace_by_expanded(t_node *node, char ***expanded_arr)
+{
+	int		i;
+	int		j;
+	int		k;
+
+	node->command = expanded_arr[0][0];
+	node->arg_capacity = calc_capacity(node, expanded_arr);
+	node->argv = ft_calloc(node->arg_capacity + 1, sizeof(char *));
+	if (!node->argv)
+		return (perror("ft_calloc"), free_3d(expanded_arr), EXIT_FAILURE);
+	i = 0;
+	k = 1;
+	while (expanded_arr[0][k])
+		node->argv[i++] = expanded_arr[0][k++];
+	free(expanded_arr[0]);
+	j = 0;
+	while (++j < node->arg_num + 1)
+	{
+		k = 0;
+		while (expanded_arr[j][k])
+			node->argv[i++] = expanded_arr[j][k++];
+		free(expanded_arr[j]);
+	}
+	node->arg_num = i;
+	return (free(expanded_arr), EXIT_SUCCESS);
 }

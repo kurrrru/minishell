@@ -1,23 +1,41 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   free_exec.c                                        :+:      :+:    :+:   */
+/*   wildcard_sort_string.c                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: nkawaguc <nkawaguc@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/11/24 18:22:29 by nkawaguc          #+#    #+#             */
-/*   Updated: 2024/11/30 00:04:46 by nkawaguc         ###   ########.fr       */
+/*   Created: 2024/11/30 17:48:26 by nkawaguc          #+#    #+#             */
+/*   Updated: 2024/11/30 17:48:31 by nkawaguc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../include/exec.h"
+#include "../../include/expander.h"
 
-void	free_exec(t_exec *exec)
+void	sort_strings(char **strings)
 {
-	if (exec->command)
-		free(exec->command);
-	if (exec->argv)
-		free_2d(exec->argv);
-	if (exec->envp)
-		free_2d(exec->envp);
+	int		i;
+	int		j;
+	int		len;
+	char	*tmp;
+
+	len = 0;
+	while (strings[len])
+		len++;
+	i = 0;
+	while (i < len - 1)
+	{
+		j = i + 1;
+		while (j < len)
+		{
+			if (ft_strcmp(strings[i], strings[j]) > 0)
+			{
+				tmp = strings[i];
+				strings[i] = strings[j];
+				strings[j] = tmp;
+			}
+			j++;
+		}
+		i++;
+	}
 }

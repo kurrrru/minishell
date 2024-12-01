@@ -6,7 +6,7 @@
 /*   By: nkawaguc <nkawaguc@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/26 00:38:00 by nkawaguc          #+#    #+#             */
-/*   Updated: 2024/11/26 19:08:29 by nkawaguc         ###   ########.fr       */
+/*   Updated: 2024/11/30 17:34:37 by nkawaguc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,10 +30,7 @@ char	*expand_env(const char *word, t_config *config)
 	flag.squote = 0;
 	expanded = ft_strdup("");
 	if (!expanded)
-	{
-		config->exit_status = EXIT_FAILURE;
-		return (perror("malloc"), NULL);
-	}
+		return (perror("malloc"), config->exit_status = EXIT_FAILURE, NULL);
 	while (word[0])
 	{
 		i = find_next_valid_dollar(word, &flag);

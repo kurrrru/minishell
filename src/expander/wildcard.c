@@ -6,159 +6,119 @@
 /*   By: nkawaguc <nkawaguc@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/26 19:01:01 by nkawaguc          #+#    #+#             */
-/*   Updated: 2024/11/29 11:50:40 by nkawaguc         ###   ########.fr       */
+/*   Updated: 2024/11/30 22:14:07 by nkawaguc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/expander.h"
 
-static char	**get_files_in_directory(void);
-static void	sort_strings(char **strings);
+static bool	containing_wildcard(const char *pattern);
+static int	realloc_expanded_if_needed(t_wildcard *wild, t_config *config);
+static char	**no_match(char ***expanded, const char *pattern,
+				t_config *config);
+static int	wildcard_match(t_wildcard *wild, const char *pattern,
+				t_config *config);
 
 char	**expand_wildcard(const char *pattern, t_config *config)
 {
-	char		**files;
-	char		**expanded;
-	size_t		count;
-	size_t		capacity;
-	size_t		i;
+	t_wildcard	wild;
 
-	files = get_files_in_directory();
-	if (!files)
-	{
-		perror("get_files_in_directory");
-		config->exit_status = EXIT_FAILURE;
-		return (NULL);
-	}
-	count = 0;
-	capacity = 2;
-	expanded = ft_calloc(capacity, sizeof(char *));
-	if (!expanded)
+	wild.capacity = 2;
+	wild.expanded = ft_calloc(wild.capacity, sizeof(char *));
+	if (!wild.expanded)
 	{
 		perror("malloc");
 		config->exit_status = EXIT_FAILURE;
 		return (NULL);
 	}
-	expanded[0] = NULL;
-	i = 0;
-	while (files[i])
+	if (!containing_wildcard(pattern))
+		return (no_match(&wild.expanded, pattern, config));
+	wild.files = get_files_in_directory();
+	if (!wild.files)
 	{
-		if (is_match(files[i], (char *)pattern))
+		config->exit_status = EXIT_FAILURE;
+		return (NULL);
+	}
+	if (wildcard_match(&wild, pattern, config) != EXIT_SUCCESS)
+		return (NULL);
+	if (wild.count == 0)
+		return (no_match(&wild.expanded, pattern, config));
+	sort_strings(wild.expanded);
+	return (wild.expanded);
+}
+
+static bool	containing_wildcard(const char *pattern)
+{
+	int	i;
+
+	i = 0;
+	while (pattern[i])
+	{
+		if (pattern[i] == '*' || pattern[i] == '?')
+			return (true);
+		i++;
+	}
+	return (false);
+}
+
+static int	realloc_expanded_if_needed(t_wildcard *wild, t_config *config)
+{
+	if (wild->count + 1 >= wild->capacity)
+	{
+		wild->capacity *= 2;
+		wild->expanded = ft_realloc_char(wild->expanded, sizeof(char *)
+				* (wild->capacity / 2), sizeof(char *) * wild->capacity);
+		if (!wild->expanded)
 		{
-			if (count + 1 >= capacity)
+			perror("ft_realloc");
+			config->exit_status = EXIT_FAILURE;
+			return (EXIT_FAILURE);
+		}
+	}
+	return (EXIT_SUCCESS);
+}
+
+static char	**no_match(char ***expanded, const char *pattern,
+				t_config *config)
+{
+	(*expanded)[0] = ft_strdup(pattern);
+	if (!(*expanded)[0])
+	{
+		perror("malloc");
+		free(*expanded);
+		config->exit_status = EXIT_FAILURE;
+		return (NULL);
+	}
+	(*expanded)[1] = NULL;
+	return (*expanded);
+}
+
+static int	wildcard_match(t_wildcard *wild, const char *pattern,
+				t_config *config)
+{
+	size_t	i;
+
+	i = -1;
+	wild->count = 0;
+	while (wild->files[++i])
+	{
+		if (is_match(wild->files[i], pattern))
+		{
+			if (realloc_expanded_if_needed(wild, config) != EXIT_SUCCESS)
+				return (EXIT_FAILURE);
+			wild->expanded[wild->count++] = ft_strdup(wild->files[i]);
+			if (!wild->expanded[wild->count - 1])
 			{
-				capacity *= 2;
-				expanded = ft_realloc_char(expanded, sizeof(char *)
-						* (capacity / 2), sizeof(char *) * capacity);
-				if (!expanded)
-				{
-					perror("ft_realloc");
-					config->exit_status = EXIT_FAILURE;
-					return (NULL);
-				}
-			}
-			expanded[count] = ft_strdup(files[i]);
-			if (!expanded[count])
-			{
-				perror("malloc");
-				free_2d(expanded);
 				config->exit_status = EXIT_FAILURE;
-				return (NULL);
-			}
-			count++;
-		}
-		free(files[i]);
-		i++;
-	}
-	free(files);
-	if (count > 0)
-	{
-		expanded[count] = NULL;
-	}
-	else
-	{
-		expanded[0] = ft_strdup(pattern);
-		if (!expanded[0])
-			return (free(expanded), NULL);
-		expanded[1] = NULL;
-	}
-	sort_strings(expanded);
-	return (expanded);
-}
-
-static char	**get_files_in_directory(void)
-{
-	DIR				*dir;
-	struct dirent	*entry;
-	char			**files;
-	int				count;
-	int				capacity;
-
-	dir = opendir(".");
-	if (!dir)
-		return (NULL);
-	capacity = 2;
-	files = ft_calloc(capacity, sizeof(char *));
-	if (!files)
-		return (NULL);
-	files[0] = NULL;
-	count = -1;
-	while (1)
-	{
-		entry = readdir(dir);
-		if (!entry)
-			break ;
-		if (count + 2 >= capacity)
-		{
-			capacity *= 2;
-			files = ft_realloc_char(files, sizeof(char *) * (capacity / 2),
-					sizeof(char *) * capacity);
-			if (!files)
-			{
-				perror("ft_realloc");
-				closedir(dir);
-				return (NULL);
+				return (perror("malloc"), free_2d(wild->expanded),
+					EXIT_FAILURE);
 			}
 		}
-		files[++count] = ft_strdup(entry->d_name);
-		if (!files[count])
-		{
-			perror("malloc");
-			free_2d(files);
-			closedir(dir);
-			return (NULL);
-		}
+		free(wild->files[i]);
 	}
-	closedir(dir);
-	return (files);
-}
-
-static void	sort_strings(char **strings)
-{
-	int		i;
-	int		j;
-	int		len;
-	char	*tmp;
-
-	len = 0;
-	while (strings[len])
-		len++;
-	i = 0;
-	while (i < len - 1)
-	{
-		j = i + 1;
-		while (j < len)
-		{
-			if (ft_strcmp(strings[i], strings[j]) > 0)
-			{
-				tmp = strings[i];
-				strings[i] = strings[j];
-				strings[j] = tmp;
-			}
-			j++;
-		}
-		i++;
-	}
+	free(wild->files);
+	wild->expanded[wild->count] = NULL;
+	return (EXIT_SUCCESS);
 }
 
 // int main(int argc, char **argv)

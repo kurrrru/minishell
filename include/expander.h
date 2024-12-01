@@ -6,7 +6,7 @@
 /*   By: nkawaguc <nkawaguc@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/26 02:24:21 by nkawaguc          #+#    #+#             */
-/*   Updated: 2024/11/26 21:51:04 by nkawaguc         ###   ########.fr       */
+/*   Updated: 2024/11/30 20:41:00 by nkawaguc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,8 +20,16 @@
 # include "macro.h"
 # include "include.h"
 
-struct s_node;
+struct					s_node;
 typedef struct s_node	t_node;
+
+typedef struct s_wildcard
+{
+	char	**files;
+	char	**expanded;
+	size_t	count;
+	size_t	capacity;
+}	t_wildcard;
 
 char	**expander(const char *word, t_config *config);
 
@@ -40,5 +48,9 @@ char	**expand_wildcard(const char *pattern, t_config *config);
 int		expand_len(char **expanded);
 
 int		expand_command_node(t_node *node, t_config *config);
+
+char	**get_files_in_directory(void);
+
+void	sort_strings(char **strings);
 
 #endif

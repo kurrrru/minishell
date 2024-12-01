@@ -6,16 +6,17 @@
 /*   By: nkawaguc <nkawaguc@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/23 21:26:25 by nkawaguc          #+#    #+#             */
-/*   Updated: 2024/11/28 23:59:59 by nkawaguc         ###   ########.fr       */
+/*   Updated: 2024/11/30 16:54:26 by nkawaguc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/builtin.h"
 
-static void	update_env(t_config *config, const char *key, const char *value);
 static char	*get_env_value(t_config *config, const char *key);
 static void	update_pwd(char old_cwd[PATH_MAX], char *target_path,
 				char cwd[PATH_MAX], t_config *config);
+static int	cd_set_home(t_config *config, char **target_path);
+static int	cd_set_oldpwd(t_config *config, char **target_path);
 
 void	bi_cd(t_exec exec, t_config *config)
 {
@@ -26,27 +27,41 @@ void	bi_cd(t_exec exec, t_config *config)
 	config->exit_status = EXIT_SUCCESS;
 	if (!exec.argv[1])
 	{
-		target_path = get_env_value(config, "HOME");
-		if (!target_path)
-		{
-			ft_putendl_fd("cd: HOME not set", STDERR_FILENO);
-			config->exit_status = EXIT_FAILURE;
+		if (cd_set_home(config, &target_path) != EXIT_SUCCESS)
 			return ;
-		}
 	}
 	else if (ft_strcmp(exec.argv[1], "-") == 0)
 	{
-		target_path = get_env_value(config, "OLDPWD");
-		if (!target_path)
-		{
-			ft_putendl_fd("cd: OLDPWD not set", STDERR_FILENO);
-			config->exit_status = EXIT_FAILURE;
+		if (cd_set_oldpwd(config, &target_path) != EXIT_SUCCESS)
 			return ;
-		}
 	}
 	else
 		target_path = exec.argv[1];
 	update_pwd(old_cwd, target_path, cwd, config);
+}
+
+static int	cd_set_home(t_config *config, char **target_path)
+{
+	*target_path = get_env_value(config, "HOME");
+	if (!*target_path)
+	{
+		ft_putendl_fd("cd: HOME not set", STDERR_FILENO);
+		config->exit_status = EXIT_FAILURE;
+		return (EXIT_FAILURE);
+	}
+	return (EXIT_SUCCESS);
+}
+
+static int	cd_set_oldpwd(t_config *config, char **target_path)
+{
+	*target_path = get_env_value(config, "OLDPWD");
+	if (!*target_path)
+	{
+		ft_putendl_fd("cd: OLDPWD not set", STDERR_FILENO);
+		config->exit_status = EXIT_FAILURE;
+		return (EXIT_FAILURE);
+	}
+	return (EXIT_SUCCESS);
 }
 
 static void	update_pwd(char old_cwd[PATH_MAX], char *target_path,
@@ -69,54 +84,8 @@ static void	update_pwd(char old_cwd[PATH_MAX], char *target_path,
 		ft_putendl_fd("cd: getcwd", STDERR_FILENO);
 		config->exit_status = EXIT_FAILURE;
 	}
-	update_env(config, "OLDPWD", old_cwd);
-	update_env(config, "PWD", cwd);
-}
-
-static void	update_env(t_config *config, const char *key, const char *value)
-{
-	int		i;
-
-	i = -1;
-	while (++i < config->envp_num)
-	{
-		if (ft_strcmp(config->envp[i].key, key) == 0)
-		{
-			free(config->envp[i].value);
-			config->envp[i].value = ft_strdup(value);
-			if (!config->envp[i].value)
-			{
-				perror("malloc");
-				config->exit_status = EXIT_FAILURE;
-				return ;
-			}
-			return ;
-		}
-	}
-	if (config->envp_num >= config->envp_capacity)
-	{
-		config->envp_capacity *= 2;
-		config->envp = ft_realloc_env(config->envp,
-				sizeof(t_env) * (config->envp_capacity / 2),
-				sizeof(t_env) * config->envp_capacity);
-		if (!config->envp)
-		{
-			perror("malloc");
-			config->exit_status = EXIT_FAILURE;
-			return ;
-		}
-	}
-	config->envp[config->envp_num].key = ft_strdup(key);
-	config->envp[config->envp_num].value = ft_strdup(value);
-	if (!config->envp[config->envp_num].key || !config->envp[config->envp_num].value)
-	{
-		perror("malloc");
-		config->exit_status = EXIT_FAILURE;
-		free(config->envp[config->envp_num].key);
-		free(config->envp[config->envp_num].value);
-		return ;
-	}
-	config->envp_num++;
+	add_or_update_env(config, "OLDPWD", old_cwd);
+	add_or_update_env(config, "PWD", cwd);
 }
 
 static char	*get_env_value(t_config *config, const char *key)

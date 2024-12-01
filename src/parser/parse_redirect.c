@@ -6,7 +6,7 @@
 /*   By: nkawaguc <nkawaguc@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/16 16:16:26 by nkawaguc          #+#    #+#             */
-/*   Updated: 2024/11/28 23:47:31 by nkawaguc         ###   ########.fr       */
+/*   Updated: 2024/11/30 00:07:58 by nkawaguc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,10 +75,12 @@ static t_node	*new_redirect(t_token token, t_token file_token, t_node **root,
 		if (double_redirect(config, root) == EXIT_FAILURE)
 			return (NULL);
 	}
-	if (redirect.type == HEREDOC && parse_heredoc(&redirect, config) == EXIT_FAILURE)
+	if (redirect.type == HEREDOC)
 	{
-		config->exit_status = EXIT_FAILURE;
-		return (free_tree(*root), NULL);
+		config->exit_status = parse_heredoc(&redirect, config);
+		if (config->exit_status != EXIT_SUCCESS)
+			return (free_tree(*root), free(redirect.file),
+				close(redirect.heredoc_fd), NULL);
 	}
 	(*root)->redirect[(*root)->redirect_num++] = redirect;
 	return (*root);
