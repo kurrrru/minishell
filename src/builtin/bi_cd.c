@@ -6,7 +6,7 @@
 /*   By: nkawaguc <nkawaguc@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/23 21:26:25 by nkawaguc          #+#    #+#             */
-/*   Updated: 2024/11/30 16:54:26 by nkawaguc         ###   ########.fr       */
+/*   Updated: 2024/12/01 20:46:01 by nkawaguc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,7 +37,7 @@ void	bi_cd(t_exec exec, t_config *config)
 	}
 	else if (exec.argv[2] != NULL)
 	{
-		ft_putendl_fd("bash: cd: too many arguments", STDERR_FILENO);
+		ft_putendl_fd("cd: too many arguments", STDERR_FILENO);
 		config->exit_status = EXIT_FAILURE;
 		return ;
 	}
