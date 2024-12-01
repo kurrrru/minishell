@@ -6,7 +6,7 @@
 /*   By: nkawaguc <nkawaguc@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/26 19:00:30 by nkawaguc          #+#    #+#             */
-/*   Updated: 2024/12/01 19:53:44 by nkawaguc         ###   ########.fr       */
+/*   Updated: 2024/12/01 19:56:20 by nkawaguc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,7 +75,7 @@ static char	**expander_quote(const char *word, t_config *config)
 				joined = join_substr_expand(expanded[0], word, i, config);
 			if (!joined)
 				return (free_2d(expanded), NULL);
-			flip_quote(&flag, word[i]);
+			flip_quote(word[i], &flag);
 			free(expanded[0]);
 			expanded[0] = joined;
 			word += i + 1;
