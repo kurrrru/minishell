@@ -6,7 +6,7 @@
 /*   By: nkawaguc <nkawaguc@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/23 21:26:29 by nkawaguc          #+#    #+#             */
-/*   Updated: 2024/11/30 21:12:09 by nkawaguc         ###   ########.fr       */
+/*   Updated: 2024/12/01 20:37:25 by nkawaguc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,11 +28,10 @@ void	bi_exit(t_exec exec, t_config *config)
 			{
 				ft_putendl_fd("bash: exit: too many arguments", STDERR_FILENO);
 				if (config->last_exit_status == EXIT_SUCCESS)
-				{
 					config->exit_status = EXIT_FAILURE;
-					return ;
-				}
-				config->exit_status = config->last_exit_status;
+				else
+					config->exit_status = config->last_exit_status;
+				return ;
 			}
 			config->last_exit_status = config->exit_status;
 		}
