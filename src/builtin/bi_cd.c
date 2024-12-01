@@ -35,6 +35,12 @@ void	bi_cd(t_exec exec, t_config *config)
 		if (cd_set_oldpwd(config, &target_path) != EXIT_SUCCESS)
 			return ;
 	}
+	else if (exec.argv[2] != NULL)
+	{
+		ft_putendl_fd("bash: cd: too many arguments", STDERR_FILENO);
+		config->exit_status = EXIT_FAILURE;
+		return ;
+	}
 	else
 		target_path = exec.argv[1];
 	update_pwd(old_cwd, target_path, cwd, config);
