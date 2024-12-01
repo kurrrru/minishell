@@ -6,7 +6,7 @@
 /*   By: nkawaguc <nkawaguc@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/26 21:53:27 by nkawaguc          #+#    #+#             */
-/*   Updated: 2024/12/01 03:47:24 by nkawaguc         ###   ########.fr       */
+/*   Updated: 2024/12/01 20:45:56 by nkawaguc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,7 +62,7 @@ static int	heredoc_read(t_redirect *redirect,
 
 static void	eof_warning(t_redirect *redirect)
 {
-	ft_putstr_fd("bash: warning: here-document \
+	ft_putstr_fd("warning: here-document \
 delimited by end-of-file (wanted `", STDERR_FILENO);
 	ft_putstr_fd(redirect->file, STDERR_FILENO);
 	ft_putendl_fd("')", STDERR_FILENO);
