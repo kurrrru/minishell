@@ -6,7 +6,7 @@
 /*   By: nkawaguc <nkawaguc@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/26 02:24:21 by nkawaguc          #+#    #+#             */
-/*   Updated: 2024/11/30 20:41:00 by nkawaguc         ###   ########.fr       */
+/*   Updated: 2024/12/01 19:59:10 by nkawaguc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,5 +52,7 @@ int		expand_command_node(t_node *node, t_config *config);
 char	**get_files_in_directory(void);
 
 void	sort_strings(char **strings);
+
+char	**expander_quote(const char *word, t_config *config);
 
 #endif
