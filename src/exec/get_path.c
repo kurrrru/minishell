@@ -6,7 +6,7 @@
 /*   By: nkawaguc <nkawaguc@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/17 02:05:02 by nkawaguc          #+#    #+#             */
-/*   Updated: 2024/11/30 16:40:56 by nkawaguc         ###   ########.fr       */
+/*   Updated: 2024/12/01 20:28:05 by nkawaguc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,7 @@ char	*get_path(char *command, t_config *config)
 	char	**path_list;
 	int		i;
 
-	if (!command)
+	if (!command || ft_strlen(command) == 0)
 		exit(EXIT_SUCCESS);
 	if (ft_strchr(command, '/'))
 		return (abs_or_rel_path(command));
