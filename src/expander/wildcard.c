@@ -6,7 +6,7 @@
 /*   By: nkawaguc <nkawaguc@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/26 19:01:01 by nkawaguc          #+#    #+#             */
-/*   Updated: 2024/11/30 22:14:07 by nkawaguc         ###   ########.fr       */
+/*   Updated: 2024/12/01 22:08:03 by nkawaguc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -120,19 +120,3 @@ static int	wildcard_match(t_wildcard *wild, const char *pattern,
 	wild->expanded[wild->count] = NULL;
 	return (EXIT_SUCCESS);
 }
-
-// int main(int argc, char **argv)
-// {
-// 	char *pattern = argc > 1 ? argv[1] : "*";
-// 	char **files = expand_wildcard(pattern);
-// 	int i = 0;
-
-// 	while (files[i])
-// 	{
-// 		ft_putendl_fd(files[i], STDOUT_FILENO);
-// 		free(files[i]);
-// 		i++;
-// 	}
-// 	free(files);
-// 	return 0;
-// }
