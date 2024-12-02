@@ -19,7 +19,7 @@ static char	*append_word(char *expanded, const char *word,
 static char	*append_env_word(char *expanded, const char *word,
 				int len, t_config *config);
 
-// wordはfreeされない。
+// word will not be freed
 char	*expand_env(const char *word, t_config *config)
 {
 	int				i;
@@ -124,30 +124,3 @@ static char	*append_env_word(char *expanded, const char *word,
 	}
 	return (new_expanded);
 }
-
-// int main(int argc, char **argv, char **envp)
-// {
-// 	t_config	config;
-// 	char		*token_to_expand = "$USER$PATH$HOME$PWD$OLDPWD$?";
-// 	char		*expanded;
-
-// 	(void)argc;
-// 	(void)argv;
-// 	if (init_config(&config, envp) == EXIT_FAILURE)
-// 	{
-// 		perror("malloc");
-// 		exit(EXIT_FAILURE);
-// 	}
-// 	config.last_exit_status = 123;
-// 	expanded = expand_env(token_to_expand, &config);
-// 	if (!expanded)
-// 	{
-// 		fprintf(stderr, "expand_env failed\n");
-// 		exit(EXIT_FAILURE);
-// 	}
-// 	del_quote(expanded);
-// 	printf("%s\n", expanded);
-// 	free(expanded);
-// 	free_config(&config);
-// 	return (config.exit_status);
-// }
