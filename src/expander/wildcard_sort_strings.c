@@ -12,7 +12,6 @@
 
 #include "../../include/expander.h"
 
-
 static void	quick_sort_ch(char **arr, int left, int right);
 static void	ft_swap_ch(char **a, char **b);
 
