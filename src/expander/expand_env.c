@@ -6,13 +6,13 @@
 /*   By: nkawaguc <nkawaguc@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/26 00:38:00 by nkawaguc          #+#    #+#             */
-/*   Updated: 2024/12/01 22:08:12 by nkawaguc         ###   ########.fr       */
+/*   Updated: 2024/12/01 23:17:10 by nkawaguc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/expander.h"
 
-static int	find_next_valid_dollar(const char *word, t_lexer_flag *flag);
+static int	find_next_valid_dollar(const char *word);
 static int	find_end_of_env(const char *word);
 static char	*append_word(char *expanded, const char *word,
 				int len, t_config *config);
@@ -22,18 +22,15 @@ static char	*append_env_word(char *expanded, const char *word,
 // word will not be freed
 char	*expand_env(const char *word, t_config *config)
 {
-	t_lexer_flag	flag;
 	int				i;
 	char			*expanded;
 
-	flag.dquote = 0;
-	flag.squote = 0;
 	expanded = ft_strdup("");
 	if (!expanded)
 		return (perror("malloc"), config->exit_status = EXIT_FAILURE, NULL);
 	while (word[0])
 	{
-		i = find_next_valid_dollar(word, &flag);
+		i = find_next_valid_dollar(word);
 		expanded = append_word(expanded, word, i, config);
 		if (!expanded)
 			return (NULL);
@@ -72,19 +69,14 @@ static char	*append_word(char *expanded, const char *word,
 	return (expanded);
 }
 
-static int	find_next_valid_dollar(const char *word, t_lexer_flag *flag)
+static int	find_next_valid_dollar(const char *word)
 {
 	int	i;
 
 	i = 0;
 	while (word[i])
 	{
-		if (word[i] == '"' && flag->squote == 0)
-			flag->dquote = !flag->dquote;
-		else if (word[i] == '\'' && flag->dquote == 0)
-			flag->squote = !flag->squote;
-		else if (word[i] == '$' && flag->squote == 0
-			&& (ft_isalpha(word[i + 1]) || word[i + 1] == '_'
+		if (word[i] == '$' && (ft_isalpha(word[i + 1]) || word[i + 1] == '_'
 				|| word[i + 1] == '?'))
 			return (i);
 		i++;
