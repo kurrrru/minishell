@@ -6,7 +6,7 @@
 /*   By: nkawaguc <nkawaguc@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/30 16:47:08 by nkawaguc          #+#    #+#             */
-/*   Updated: 2024/11/30 17:07:23 by nkawaguc         ###   ########.fr       */
+/*   Updated: 2024/12/01 22:32:56 by nkawaguc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,8 @@
 
 static void	malloc_error(t_config *config);
 static int	update_value(t_config *config, const char *value, int i);
+static void	update_value_when_key_exists(t_config *config, const char *value,
+				int i);
 
 void	add_or_update_env(t_config *config, const char *key,
 		const char *value)
@@ -24,8 +26,7 @@ void	add_or_update_env(t_config *config, const char *key,
 	while (++i < config->envp_num)
 	{
 		if (ft_strcmp(config->envp[i].key, key) == 0)
-			return (free(config->envp[i].value),
-				(void)update_value(config, value, i));
+			return (update_value_when_key_exists(config, value, i));
 	}
 	if (config->envp_num >= config->envp_capacity - 1)
 	{
@@ -42,6 +43,15 @@ void	add_or_update_env(t_config *config, const char *key,
 	if (update_value(config, value, config->envp_num) != EXIT_SUCCESS)
 		return (free(config->envp[config->envp_num].key));
 	config->envp_num++;
+}
+
+static void	update_value_when_key_exists(t_config *config, const char *value,
+		int i)
+{
+	if (!value)
+		return ;
+	free(config->envp[i].value);
+	update_value(config, value, i);
 }
 
 static void	malloc_error(t_config *config)
