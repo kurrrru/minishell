@@ -1,5 +1,9 @@
 # Minishell
-This is a minishell that supports the minimal features of bash.
+This is a minishell that supports the minimal features of Bash.
+
+## What is a shell?
+
+## What is Bash?
 
 # Features
 This minishell supports the following features:
