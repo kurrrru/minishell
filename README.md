@@ -41,5 +41,5 @@ This minishell supports the following features:
 # Development time
 2024/11/5 - 2024/12/3
 
-## License
+# License
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
