@@ -22,7 +22,7 @@ This minishell supports the following features:
 # Unsupported features
 - Background processes using & (e.g., `command &`).
 - Advanced wildcard patterns (e.g., recursive `**`).
-- Command substitution using backticks (e.g., `\`command\``).
+- Command substitution using backticks (e.g., `` `command` ``).
 - Process substitution (e.g., `<(command)` or `>(command)`).
 - Arithmetic evaluation (e.g., `$((1+1))`).
 - Word splitting
